@@ -2,15 +2,13 @@
 
 The project name speaks for itself
 
-## Getting Started
+## What is this?
 
-This project is a starting point for a Flutter application.
+This will be a mobile app that a user (me) can use to access the database of cat videos recorded and pushed from the Raspberry Pi
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## TODO
+- [ ] design "home" page of app where videos can be scrolled/swiped through
+- [ ] create app login page
+- [ ] hook Firebase Authenticate API up to login page
+- [ ] figure out which Firebase services to use to retrieve videos from Firestore/RTDB
+- [ ] use said services to retrieve videos and display them to app home page
