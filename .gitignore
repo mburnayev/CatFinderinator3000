@@ -1,1 +1,4 @@
 .DS_Store
+app/.dart_tool/
+app/.idea/
+app/build/
