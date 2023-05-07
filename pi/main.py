@@ -21,9 +21,9 @@ def main():
             print("Can't retrieve frame, exiting ...")
             break
 
-        # show camera frame
-        cv2.imshow("Camera Feed", frame)
-        # 
+        # crop and show camera frame
+        cropped_frame = frame[0:480, 80:560]
+        cv2.imshow("Camera Feed", cropped_frame)
         
         if cv2.waitKey(1) == ord('q'):
             break
@@ -34,4 +34,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
