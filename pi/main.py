@@ -1,19 +1,25 @@
-"""
-Perpetually running module, uses trained model to detect calico cats.
-If cat is detected in frame, record a short video of cat, save video to device,
-push video to database, then delete video from device.
+# """
+# Perpetually running module, uses trained model to detect calico cats.
+# If cat is detected in frame, record a short video of cat, save video to device,
+# push video to database, then delete video from device.
 
-Author: Misha Burnayev
-Date: 02/05/2023 (dd/mm/yyyy)
-"""
-import cv2
+# Author: Misha Burnayev
+# Date: 02/05/2023 (dd/mm/yyyy)
+# """
+import cv2, time
 
 def main():
     cap = cv2.VideoCapture(0)
+    fcc = cv2.VideoWriter_fourcc(*'XVID')
+    fps = 30.0
+    dims = (480, 480)
+    recording = False
+    writer = None
+
     if not cap.isOpened():
-        print("Cannot open camera")
+        print("Cannot open camera!")
         return
-        
+    
     while True:
         # read camera frame
         ret, frame = cap.read()
@@ -21,11 +27,30 @@ def main():
             print("Can't retrieve frame, exiting ...")
             break
 
-        # crop and show camera frame
+        # display frame
         cropped_frame = frame[0:480, 80:560]
         cv2.imshow("Camera Feed", cropped_frame)
+
+        key = cv2.waitKey(1)
+        # record video if user presses 'r' key
+        if key == ord('r') and not recording:
+            title = time.strftime("Video_%d.%m.%y_%H.%M.%S.avi", time.localtime())
+            print("Video now recording")
+            writer = cv2.VideoWriter(title, fcc, fps, dims)
+            recording = True
+
+        # add frame to video if recording
+        if recording:
+            writer.write(cropped_frame)
         
-        if cv2.waitKey(1) == ord('q'):
+        # # stop recording video if user presses 's' key
+        if key == ord('s') and recording:
+            print("Video recorded!")
+            recording = False
+            writer.release()
+
+        # exit loop and terminate program if user presses 'q' key
+        if key == ord('q'):
             break
 
     # cleanup
@@ -34,3 +59,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
