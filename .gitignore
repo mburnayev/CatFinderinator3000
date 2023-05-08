@@ -2,3 +2,7 @@
 app/.dart_tool/
 app/.idea/
 app/build/
+app/lib/firebase_options.dart
+app/.flutter-plugins
+app/.flutter-plugins-dependencies
+app/android/app/google-services.json
