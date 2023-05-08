@@ -1,14 +1,30 @@
-# """
-# Perpetually running module, uses trained model to detect calico cats.
-# If cat is detected in frame, record a short video of cat, save video to device,
-# push video to database, then delete video from device.
+"""
+Perpetually running module, uses trained model to detect calico cats.
+If cat is detected in frame, record a short video of cat, save video to device,
+push video to database, then delete video from device.
 
-# Author: Misha Burnayev
-# Date: 02/05/2023 (dd/mm/yyyy)
-# """
-import cv2, time
+Author: Misha Burnayev
+Date: 02/05/2023 (dd/mm/yyyy)
+"""
+import cv2, time, pyrebase
 
 def main():
+    config = {}
+    with open("credentials.txt") as f:
+        for line in f:
+            (key, val) = line.split(" ")
+            key, val = key.strip(), val.strip()
+            config[key] = val
+    print(config)
+
+    firebase = pyrebase.initialize_app(config)
+    storage = firebase.storage()
+
+    path_cloud = "videos/x1.jpg"
+    path_local = "x.jpg"
+    storage.child(path_cloud).put(path_local)
+
+def main2():
     cap = cv2.VideoCapture(0)
     fcc = cv2.VideoWriter_fourcc(*'XVID')
     fps = 30.0
