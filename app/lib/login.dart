@@ -1,6 +1,6 @@
-import 'package:cat_finderinator_threethousand/home.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cat_finderinator_threethousand/home.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -10,8 +10,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String email = "", pwd = "";
-  final GlobalKey<FormState> keyForm = GlobalKey<FormState>();
+  final emailCtrl = TextEditingController(), pwdCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context){
@@ -33,40 +32,32 @@ class _LoginState extends State<Login> {
   }
 
   Widget get emailField {
-    return TextFormField(validator: (input) {
-      if (input!.isEmpty) {
-        return "email@xyz.com";
-      }
-    },
-        onSaved: (input) => email = input!,
-        decoration: const InputDecoration(labelText: "Email")
-    );
+    return TextField(controller: emailCtrl,
+        decoration: const InputDecoration(labelText: "Email"));
   }
 
   Widget get pwdField {
-    return TextFormField(validator: (input) {
-      if (input!.isEmpty) {
-        return "password";
-      }
-    },
-        onSaved: (input) => pwd = input!,
+    return TextFormField(controller: pwdCtrl,
         decoration: const InputDecoration(labelText: "Password"),
-        obscureText: true
-    );
+        obscureText: true);
   }
 
   Widget get loginButton {
     return ElevatedButton(onPressed: login, child: const Text("Log in"));
   }
+
+  Widget get bagLoginAlert {
+    return const AlertDialog(title: Text("Login error"), content: Text("Invalid username and/or password"));
+  }
   
   Future<void> login() async {
-      try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: pwd);
-        if (context.mounted){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
-        }
-      } catch (e) {
-        print("Login failed!");
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailCtrl.text, password: pwdCtrl.text);
+      if (context.mounted) {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
       }
+    } catch (e) {
+      showDialog(context: context, builder: (BuildContext context) => bagLoginAlert);
+    }
   }
 }
