@@ -6,15 +6,15 @@ This system is composed of a computer with a camera, an object detection model t
 
 At the most abstracted level, this is a visualization of the project.
 
-<img width="675" alt="Screenshot 2023-05-04 at 5 05 11 PM" src="https://user-images.githubusercontent.com/82725378/236331799-2918a59d-44b4-4771-993a-57618ac57ef0.png">
+<img width="563" alt="Screenshot 2023-05-10 at 12 43 26 PM (2)" src="https://github.com/Mooobert/CatFinderinator3000/assets/82725378/e32655af-2f40-4ecb-b26d-d1ba49db03fc">
 
 ## Technologies used
 - Python
 - Dart
 - OpenCV
-- FOMO for machine learning
+- Tensorflow
 - Flutter app framework
 - Firebase Authentication
-- Cloud Firestore
+- Firebase Cloud Storage
 - Autodesk Fusion 360
 - UltiMaker Cura
