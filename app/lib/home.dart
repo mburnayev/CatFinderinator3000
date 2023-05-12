@@ -3,7 +3,7 @@ import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-final storage = FirebaseStorage.instance;
+final storage = FirebaseStorage.instance.ref();
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -21,14 +21,21 @@ class _HomeState extends State<Home> {
   void printDialogue() => print("button clicked");
 
   Widget get homeApp {
+    return scrollableList;
+  }
+
+  Widget get scrollableList {
     return Scaffold(
-        body: Center(
+      body: Center(
+        child: SingleChildScrollView(
           child: Column(
-              children: [const Text("Nothing here yet, but here's a button :)",
-                  style: TextStyle(color: Colors.lightBlue, fontSize: 30),
-                  textAlign: TextAlign.center),
-                FloatingActionButton(onPressed: printDialogue)])
+            children: [
+              FloatingActionButton(onPressed: printDialogue),
+              FloatingActionButton(onPressed: printDialogue),
+              FloatingActionButton(onPressed: printDialogue)]
+          )
         )
+      )
     );
   }
 }
