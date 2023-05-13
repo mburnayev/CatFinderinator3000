@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
-final storage = FirebaseStorage.instance.ref();
-final videosRef = storage.child("videos");
-int numResults = 0;
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,23 +9,27 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final storageRef = FirebaseStorage.instance.ref().child("videos");
+  List<VideoItem> list = [];
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(home: homeApp);
   }
-  
-  void printDialogue() => print("button clicked");
 
   Widget get homeApp {
-    getResults;
-    return (numResults == 0) ? noVideosScaffold : videoListScaffold;
+    getResults();
+    print("list length is ${list.length}");
+    return videoListScaffold;
   }
 
   Future<void> getResults() async {
-    var listResult = await videosRef.listAll();
-    for(var item in listResult.items){
-      numResults++;
+    var listResult = await storageRef.listAll();
+    for (var item in listResult.items) {
+      print(item.name);
+      list.add(VideoItem(item.name));
     }
+    print("res");
   }
 
   Widget get noVideosScaffold {
@@ -51,12 +49,10 @@ class _HomeState extends State<Home> {
   Widget get videoListScaffold {
     return Scaffold(
       body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              FloatingActionButton(onPressed: printDialogue)]
-          )
-        )
+        child: ListView.builder(
+          itemBuilder: (context, index) => VideoList(item: list[index]),
+          itemCount: list.length,
+        ),
       )
     );
   }
@@ -66,4 +62,24 @@ class _HomeState extends State<Home> {
 class VideoItem {
   String title;
   VideoItem(this.title);
+}
+
+class VideoList extends StatefulWidget {
+  final VideoItem? item;
+  // final Function(VideoItem videoItem)? onPressed;
+  // const VideoList({super.key, this.item, this.onPressed});
+  const VideoList({super.key, this.item});
+
+
+  @override
+  State<StatefulWidget> createState() => _VideoListState();
+}
+
+class _VideoListState extends State<VideoList> {
+  VideoItem? item;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(title: Text(item!.title));
+  }
 }
