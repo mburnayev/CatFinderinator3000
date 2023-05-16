@@ -1,3 +1,4 @@
+import 'package:cat_finderinator_threethousand/videoPlayer.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -10,7 +11,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final storageRef = FirebaseStorage.instance.ref().child("videos");
-  List<VideoItem> list = [];
+  List<String> list = [];
 
   @override
   Widget build(BuildContext context) {
@@ -18,18 +19,28 @@ class _HomeState extends State<Home> {
   }
 
   Widget get homeApp {
-    getResults();
-    print("list length is ${list.length}");
-    return videoListScaffold;
+    return FutureBuilder<void>(
+      future: getResults(),
+      builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator(); // Display a loading indicator while waiting for results
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}'); // Handle any errors that occur during the asynchronous operation
+        } else {
+          Widget finalScaffold = noVideosScaffold;
+          finalScaffold = (list.isEmpty) ? noVideosScaffold : videoListScaffold;
+          return finalScaffold; // Generate the scaffold widget once the results are available
+        }
+      },
+    );
   }
 
-  Future<void> getResults() async {
-    var listResult = await storageRef.listAll();
-    for (var item in listResult.items) {
-      print(item.name);
-      list.add(VideoItem(item.name));
-    }
-    print("res");
+  Future<void> getResults() {
+    return storageRef.listAll().then((listResult) {
+      for (var item in listResult.items) {
+        list.add(item.name);
+      }
+    });
   }
 
   Widget get noVideosScaffold {
@@ -48,38 +59,16 @@ class _HomeState extends State<Home> {
 
   Widget get videoListScaffold {
     return Scaffold(
-      body: Center(
-        child: ListView.builder(
-          itemBuilder: (context, index) => VideoList(item: list[index]),
+      body: ListView.builder(
           itemCount: list.length,
-        ),
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              child: Text(index.toString()),
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Video())),
+            );
+          }
       )
     );
   }
 
-}
-
-class VideoItem {
-  String title;
-  VideoItem(this.title);
-}
-
-class VideoList extends StatefulWidget {
-  final VideoItem? item;
-  // final Function(VideoItem videoItem)? onPressed;
-  // const VideoList({super.key, this.item, this.onPressed});
-  const VideoList({super.key, this.item});
-
-
-  @override
-  State<StatefulWidget> createState() => _VideoListState();
-}
-
-class _VideoListState extends State<VideoList> {
-  VideoItem? item;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(title: Text(item!.title));
-  }
 }
