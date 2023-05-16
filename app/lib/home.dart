@@ -1,6 +1,6 @@
-import 'package:cat_finderinator_threethousand/videoPlayer.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cat_finderinator_threethousand/videoPlayer.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
     return MaterialApp(home: homeApp);
   }
 
-  Widget get homeApp {
+  Widget get homeApp { // thank you chat ChatGPT
     return FutureBuilder<void>(
       future: getResults(),
       builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}'); // Handle any errors that occur during the asynchronous operation
         } else {
-          Widget finalScaffold = noVideosScaffold;
+          Widget finalScaffold = const Scaffold();
           finalScaffold = (list.isEmpty) ? noVideosScaffold : videoListScaffold;
           return finalScaffold; // Generate the scaffold widget once the results are available
         }
