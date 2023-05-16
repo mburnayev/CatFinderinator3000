@@ -63,8 +63,8 @@ class _HomeState extends State<Home> {
           itemCount: list.length,
           itemBuilder: (context, index) {
             return GestureDetector(
-              child: Text(index.toString()),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Video())),
+              child: Text(list[index].toString()),
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Video(name: list[index])))
             );
           }
       )
