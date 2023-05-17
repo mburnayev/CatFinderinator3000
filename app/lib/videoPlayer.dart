@@ -30,9 +30,11 @@ class _VideoState extends State<VideoPlayerScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network("$bucketPath/${widget.name}");
+    // _controller = VideoPlayerController.network("$bucketPath${widget.name}");
+    print("$bucketPath${widget.name}");
+    _controller = VideoPlayerController.asset('$bucketPath${widget.name}');
     _initVPFuture = _controller.initialize();
-    _controller.setLooping(false);
+    _controller.setLooping(true);
   }
 
   @override
@@ -49,9 +51,9 @@ class _VideoState extends State<VideoPlayerScreen> {
   // adds watchable video, play and pause options, buttons to go back to Home
   Widget get singleVideo {
     return Scaffold(
-      bottomNavigationBar: BottomAppBar(
-        child: backButtonBox
-      ),
+      // bottomNavigationBar: BottomAppBar(
+      //   child: backButtonBox
+      // ),
       appBar: AppBar(title: Text(widget.name)),
       body: FutureBuilder(
         future: _initVPFuture,
