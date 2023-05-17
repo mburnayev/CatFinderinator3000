@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:async';
 import 'package:video_player/video_player.dart';
 import 'package:cat_finderinator_threethousand/home.dart';
 
@@ -8,10 +10,11 @@ class Video extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: "Video $name",
-        home: VideoPlayerScreen(name: name,)
-    );
+    // return MaterialApp(
+    //     title: "Video $name",
+    //     home: VideoPlayerScreen(name: name)
+    // );
+    return Scaffold(body: VideoPlayerScreen(name: name));
   }
 }
 
@@ -49,13 +52,7 @@ class _VideoState extends State<VideoPlayerScreen> {
   Widget get singleVideo {
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
-        child: SizedBox(
-            height: 80.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [backButton],
-            )
-        )
+        child: backButtonBox
       ),
       appBar: AppBar(title: Text(widget.name)),
       body: FutureBuilder(
@@ -74,6 +71,16 @@ class _VideoState extends State<VideoPlayerScreen> {
         }
       ),
       floatingActionButton: playPauseButton,
+    );
+  }
+
+  Widget get backButtonBox {
+    return SizedBox(
+        height: 80.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [backButton],
+        )
     );
   }
 
@@ -96,7 +103,7 @@ class _VideoState extends State<VideoPlayerScreen> {
         width: 175.0,
         child: FloatingActionButton.extended(
           heroTag: null,
-          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Home())), // Navigate back to home page
+          onPressed: () => Navigator.pop(context), // Navigate back to home page
           label: const Text("Back to videos"),
           icon: const Icon(Icons.arrow_left),
           backgroundColor: Colors.black,

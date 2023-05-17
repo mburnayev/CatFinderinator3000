@@ -15,7 +15,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: homeApp);
+    return Scaffold(body: homeApp);
   }
 
   Widget get homeApp { // thank you chat ChatGPT
