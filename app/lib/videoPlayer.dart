@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'dart:async';
+import 'firebase_options.dart';
 import 'package:video_player/video_player.dart';
-import 'package:cat_finderinator_threethousand/home.dart';
 
+// Video entrypoint
 class Video extends StatelessWidget {
   final String name;
   const Video({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
-    // return MaterialApp(
-    //     title: "Video $name",
-    //     home: VideoPlayerScreen(name: name)
-    // );
     return Scaffold(body: VideoPlayerScreen(name: name));
   }
 }
 
 class VideoPlayerScreen extends StatefulWidget {
+  // video name
   final String name;
   const VideoPlayerScreen({super.key, required this.name});
 
@@ -31,9 +28,9 @@ class _VideoState extends State<VideoPlayerScreen> {
   late Future<void> _initVPFuture;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    _controller = VideoPlayerController.network("gs://catfinderinator3000.appspot.com/videos/${widget.name}");
+    _controller = VideoPlayerController.network("$bucketPath/${widget.name}");
     _initVPFuture = _controller.initialize();
     _controller.setLooping(false);
   }
@@ -49,6 +46,7 @@ class _VideoState extends State<VideoPlayerScreen> {
     return singleVideo;
   }
 
+  // adds watchable video, play and pause options, buttons to go back to Home
   Widget get singleVideo {
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
@@ -74,6 +72,7 @@ class _VideoState extends State<VideoPlayerScreen> {
     );
   }
 
+  // return to Home
   Widget get backButtonBox {
     return SizedBox(
         height: 80.0,
@@ -97,6 +96,7 @@ class _VideoState extends State<VideoPlayerScreen> {
     );
   }
 
+  // another back button? will probably be removed
   Widget get backButton {
     return SizedBox(
         height: 50.0,

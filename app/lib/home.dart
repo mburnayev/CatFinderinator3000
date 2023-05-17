@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cat_finderinator_threethousand/videoPlayer.dart';
 
+// Home entrypoint
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -10,7 +11,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  // reference to Firebase Cloud Storage bucket using earlier credentials
   final storageRef = FirebaseStorage.instance.ref().child("videos");
+  // video names list
   List<String> list = [];
 
   @override
@@ -18,6 +21,7 @@ class _HomeState extends State<Home> {
     return Scaffold(body: homeApp);
   }
 
+  // buffers then retrieves correct Scaffold depending on number of videos
   Widget get homeApp { // thank you chat ChatGPT
     return FutureBuilder<void>(
       future: getResults(),
@@ -35,6 +39,7 @@ class _HomeState extends State<Home> {
     );
   }
 
+  // retrieves video names from Firebase Cloud Storage bucket
   Future<void> getResults() {
     return storageRef.listAll().then((listResult) {
       for (var item in listResult.items) {
@@ -57,6 +62,7 @@ class _HomeState extends State<Home> {
     );
   }
 
+  // redirects user to corresponding video when video name tapped/pressed
   Widget get videoListScaffold {
     return Scaffold(
       body: ListView.separated(
