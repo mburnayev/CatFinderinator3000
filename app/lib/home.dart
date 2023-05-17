@@ -59,13 +59,14 @@ class _HomeState extends State<Home> {
 
   Widget get videoListScaffold {
     return Scaffold(
-      body: ListView.builder(
+      body: ListView.separated(
+        separatorBuilder: (context, index) => const Divider(),
           itemCount: list.length,
           itemBuilder: (context, index) {
-            return GestureDetector(
-              child: Text(list[index].toString()),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Video(name: list[index])))
-            );
+            return ElevatedButton(
+                child: Text(list[index].toString()),
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Video(name: list[index]))));
           }
       )
     );
