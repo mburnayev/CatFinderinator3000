@@ -8,29 +8,26 @@ Date: 02/05/2023 (dd/mm/yyyy)
 """
 import cv2, time, pyrebase
 
+config = {}
+with open("credentials.txt") as f:
+    for line in f:
+        (key, val) = line.split(" ")
+        key, val = key.strip(), val.strip()
+        config[key] = val
+
+firebase = pyrebase.initialize_app(config)
+storage = firebase.storage()
+
 def main():
-    config = {}
-    with open("credentials.txt") as f:
-        for line in f:
-            (key, val) = line.split(" ")
-            key, val = key.strip(), val.strip()
-            config[key] = val
-    print(config)
-
-    firebase = pyrebase.initialize_app(config)
-    storage = firebase.storage()
-
-    path_cloud = "videos/x1.jpg"
-    path_local = "x.jpg"
-    storage.child(path_cloud).put(path_local)
-
-def main2():
     cap = cv2.VideoCapture(0)
-    fcc = cv2.VideoWriter_fourcc(*'XVID')
+    # mp4 codec that doesn't cause FFMPEG to print warnings and is
+    # compatible with native Chrome Web player and Android ExoPlayer
+    fcc = cv2.VideoWriter_fourcc(*"avc1")
     fps = 30.0
     dims = (480, 480)
     recording = False
     writer = None
+    title = "failed.mp4"
 
     if not cap.isOpened():
         print("Cannot open camera!")
@@ -50,7 +47,7 @@ def main2():
         key = cv2.waitKey(1)
         # record video if user presses 'r' key
         if key == ord('r') and not recording:
-            title = time.strftime("Video_%d.%m.%y_%H.%M.%S.avi", time.localtime())
+            title = time.strftime("Video_%d.%m.%y_%H.%M.%S.mp4", time.localtime())
             print("Video now recording")
             writer = cv2.VideoWriter(title, fcc, fps, dims)
             recording = True
@@ -59,11 +56,14 @@ def main2():
         if recording:
             writer.write(cropped_frame)
         
-        # # stop recording video if user presses 's' key
+        # stop recording video if user presses 's' key
         if key == ord('s') and recording:
             print("Video recorded!")
             recording = False
             writer.release()
+            path_cloud = "videos/" + title
+            path_local = title
+            storage.child(path_cloud).put(path_local)
 
         # exit loop and terminate program if user presses 'q' key
         if key == ord('q'):
