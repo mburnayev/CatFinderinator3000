@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'firebase_options.dart';
 import 'package:video_player/video_player.dart';
+import 'firebase_options.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 
 // Video entrypoint
 class Video extends StatelessWidget {
@@ -24,15 +26,23 @@ class VideoPlayerScreen extends StatefulWidget {
 }
 
 class _VideoState extends State<VideoPlayerScreen> {
+  final storageRef = FirebaseStorage.instance.ref().child("videos");
+  String videoURLName = "";
   late VideoPlayerController _controller;
   late Future<void> _initVPFuture;
 
   @override
   void initState() {
     super.initState();
-    // _controller = VideoPlayerController.network("$bucketPath${widget.name}");
-    print("$bucketPath${widget.name}");
-    _controller = VideoPlayerController.asset('$bucketPath${widget.name}');
+    getVideo();
+    _controller = VideoPlayerController.network(videoURLName);
+    _initVPFuture = _controller.initialize();
+  }
+
+  Future<void> getVideo() async {
+    final videoURL = await storageRef.child(widget.name).getDownloadURL();
+    videoURLName = videoURL;
+    _controller = VideoPlayerController.network(videoURLName);
     _initVPFuture = _controller.initialize();
     _controller.setLooping(true);
   }
