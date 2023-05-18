@@ -6,7 +6,7 @@ push video to database, then delete video from device.
 Author: Misha Burnayev
 Date: 02/05/2023 (dd/mm/yyyy)
 """
-import cv2, time, pyrebase
+import cv2, time, os, pyrebase
 
 config = {}
 with open("credentials.txt") as f:
@@ -28,12 +28,14 @@ def main():
     recording = False
     writer = None
     title = "failed.mp4"
+    num_det_frames = 0
 
     if not cap.isOpened():
         print("Cannot open camera!")
         return
     
     while True:
+        print("entered loop")
         # read camera frame
         ret, frame = cap.read()
         if not ret:
@@ -42,7 +44,8 @@ def main():
 
         # display frame
         cropped_frame = frame[0:480, 80:560]
-        cv2.imshow("Camera Feed", cropped_frame)
+        # cv2.imshow("Camera Feed", cropped_frame)
+        print(cropped_frame)
 
         key = cv2.waitKey(1)
         # record video if user presses 'r' key
@@ -64,11 +67,13 @@ def main():
             path_cloud = "videos/" + title
             path_local = title
             storage.child(path_cloud).put(path_local)
+            time.sleep(1.5)
+            os.remove(title)
 
         # exit loop and terminate program if user presses 'q' key
         if key == ord('q'):
             break
-
+    
     # cleanup
     cap.release()
     cv2.destroyAllWindows()
