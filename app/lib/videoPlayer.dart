@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:video_player/video_player.dart';
-import 'firebase_options.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 
 // Video entrypoint
 class Video extends StatelessWidget {
@@ -31,6 +29,7 @@ class _VideoState extends State<VideoPlayerScreen> {
   late VideoPlayerController _controller;
   late Future<void> _initVPFuture;
 
+  // initialize video controllers while asynchronously fetching video
   @override
   void initState() {
     super.initState();
@@ -39,6 +38,7 @@ class _VideoState extends State<VideoPlayerScreen> {
     _initVPFuture = _controller.initialize();
   }
 
+  // retrieve video and have controllers update to display video
   Future<void> getVideo() async {
     final videoURL = await storageRef.child(widget.name).getDownloadURL();
     videoURLName = videoURL;
@@ -61,9 +61,7 @@ class _VideoState extends State<VideoPlayerScreen> {
   // adds watchable video, play and pause options, buttons to go back to Home
   Widget get singleVideo {
     return Scaffold(
-      // bottomNavigationBar: BottomAppBar(
-      //   child: backButtonBox
-      // ),
+      // the AppBar widget apparently comes with a back button?
       appBar: AppBar(title: Text(widget.name)),
       body: FutureBuilder(
         future: _initVPFuture,
@@ -84,17 +82,6 @@ class _VideoState extends State<VideoPlayerScreen> {
     );
   }
 
-  // return to Home
-  Widget get backButtonBox {
-    return SizedBox(
-        height: 80.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [backButton],
-        )
-    );
-  }
-
   Widget get playPauseButton {
     return FloatingActionButton(
         onPressed: () {
@@ -104,21 +91,6 @@ class _VideoState extends State<VideoPlayerScreen> {
         },
         child: Icon(
             _controller.value.isPlaying ? Icons.pause : Icons.play_arrow
-        )
-    );
-  }
-
-  // another back button? will probably be removed
-  Widget get backButton {
-    return SizedBox(
-        height: 50.0,
-        width: 175.0,
-        child: FloatingActionButton.extended(
-          heroTag: null,
-          onPressed: () => Navigator.pop(context), // Navigate back to home page
-          label: const Text("Back to videos"),
-          icon: const Icon(Icons.arrow_left),
-          backgroundColor: Colors.black,
         )
     );
   }
