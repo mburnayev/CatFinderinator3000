@@ -13,31 +13,21 @@
 # limitations under the License.
 """Main script to run image segmentation."""
 
-import argparse
-import sys
-import time
+import sys, time, cv2, numpy as np, utils
 from typing import List
 
-import cv2
-import numpy as np
 from tflite_support.task import core
 from tflite_support.task import processor
 from tflite_support.task import vision
-import utils
 
 # Visualization parameters
 _FPS_AVERAGE_FRAME_COUNT = 10
 _FPS_LEFT_MARGIN = 24  # pixels
 _LEGEND_TEXT_COLOR = (0, 0, 255)  # red
-_LEGEND_BACKGROUND_COLOR = (255, 255, 255)  # white
 _LEGEND_FONT_SIZE = 1
 _LEGEND_FONT_THICKNESS = 1
 _LEGEND_ROW_SIZE = 20  # pixels
-_LEGEND_RECT_SIZE = 16  # pixels
-_LABEL_MARGIN = 10
 _OVERLAY_ALPHA = 0.5
-_PADDING_WIDTH_FOR_LEGEND = 150  # pixels
-
 
 def run(model: str, display_mode: str, num_threads: int, enable_edgetpu: bool,
         camera_id: int, width: int, height: int) -> None:
@@ -73,7 +63,11 @@ def run(model: str, display_mode: str, num_threads: int, enable_edgetpu: bool,
   cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
   # Continuously capture images from the camera and run inference.
-  while cap.isOpened():
+  if not cap.isOpened():
+        print("Cannot open camera!")
+        return
+  
+  while True:
     success, image = cap.read()
     if not success:
       sys.exit(
@@ -81,7 +75,7 @@ def run(model: str, display_mode: str, num_threads: int, enable_edgetpu: bool,
       )
 
     counter += 1
-    image = cv2.flip(image, 1)
+    # image = image[40:440, 120:520] # image[0:480, 80:560], 480x640
 
     # Convert the image from BGR to RGB as required by the TFLite model.
     rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -92,8 +86,7 @@ def run(model: str, display_mode: str, num_threads: int, enable_edgetpu: bool,
     segmentation_result = segmenter.segment(tensor_image)
 
     # Convert the segmentation result into an image.
-    seg_map_img, found_colored_labels = utils.segmentation_map_to_image(
-        segmentation_result)
+    seg_map_img, found_colored_labels = utils.segmentation_map_to_image(segmentation_result)
 
     # Resize the segmentation mask to be the same shape as input image.
     seg_map_img = cv2.resize(
@@ -102,8 +95,7 @@ def run(model: str, display_mode: str, num_threads: int, enable_edgetpu: bool,
         interpolation=cv2.INTER_NEAREST)
 
     # Visualize segmentation result on image.
-    overlay = visualize(image, seg_map_img, display_mode, fps,
-                        found_colored_labels)
+    overlay = visualize(image, seg_map_img, display_mode, fps, found_colored_labels)
 
     # Calculate the FPS
     if counter % _FPS_AVERAGE_FRAME_COUNT == 0:
@@ -138,11 +130,8 @@ def visualize(input_image: np.ndarray, segmentation_map_image: np.ndarray,
   """
   # Show the input image and the segmentation map image.
   if display_mode == 'overlay':
-    # Overlay mode.
-    overlay = cv2.addWeighted(input_image, _OVERLAY_ALPHA,
-                              segmentation_map_image, _OVERLAY_ALPHA, 0)
+    overlay = cv2.addWeighted(input_image, _OVERLAY_ALPHA, segmentation_map_image, _OVERLAY_ALPHA, 0)
   elif display_mode == 'side-by-side':
-    # Side by side mode.
     overlay = cv2.hconcat([input_image, segmentation_map_image])
   else:
     sys.exit(f'ERROR: Unsupported display mode: {display_mode}.')
@@ -153,73 +142,7 @@ def visualize(input_image: np.ndarray, segmentation_map_image: np.ndarray,
   cv2.putText(overlay, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN,
               _LEGEND_FONT_SIZE, _LEGEND_TEXT_COLOR, _LEGEND_FONT_THICKNESS)
 
-  # Initialize the origin coordinates of the label.
-  legend_x = overlay.shape[1] + _LABEL_MARGIN
-  legend_y = overlay.shape[0] // _LEGEND_ROW_SIZE + _LABEL_MARGIN
-
-  # Expand the frame to show the label.
-  overlay = cv2.copyMakeBorder(overlay, 0, 0, 0, _PADDING_WIDTH_FOR_LEGEND,
-                               cv2.BORDER_CONSTANT, None,
-                               _LEGEND_BACKGROUND_COLOR)
-
-  # Show the label on right-side frame.
-  for colored_label in colored_labels:
-    rect_color = colored_label.color
-    start_point = (legend_x, legend_y)
-    end_point = (legend_x + _LEGEND_RECT_SIZE, legend_y + _LEGEND_RECT_SIZE)
-    cv2.rectangle(overlay, start_point, end_point, rect_color,
-                  -_LEGEND_FONT_THICKNESS)
-
-    label_location = legend_x + _LEGEND_RECT_SIZE + _LABEL_MARGIN, legend_y + _LABEL_MARGIN
-    cv2.putText(overlay, colored_label.category_name, label_location,
-                cv2.FONT_HERSHEY_PLAIN, _LEGEND_FONT_SIZE, _LEGEND_TEXT_COLOR,
-                _LEGEND_FONT_THICKNESS)
-    legend_y += (_LEGEND_RECT_SIZE + _LABEL_MARGIN)
-
   return overlay
 
-
-def main():
-  parser = argparse.ArgumentParser(
-      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-  parser.add_argument(
-      '--model',
-      help='Name of image segmentation model.',
-      required=False,
-      default='deeplabv3.tflite')
-  parser.add_argument(
-      '--displayMode',
-      help='Mode to display image segmentation.',
-      required=False,
-      default='overlay')
-  parser.add_argument(
-      '--numThreads',
-      help='Number of CPU threads to run the model.',
-      required=False,
-      default=4)
-  parser.add_argument(
-      '--enableEdgeTPU',
-      help='Whether to run the model on EdgeTPU.',
-      action='store_true',
-      required=False,
-      default=False)
-  parser.add_argument(
-      '--cameraId', help='Id of camera.', required=False, default=0)
-  parser.add_argument(
-      '--frameWidth',
-      help='Width of frame to capture from camera.',
-      required=False,
-      default=640)
-  parser.add_argument(
-      '--frameHeight',
-      help='Height of frame to capture from camera.',
-      required=False,
-      default=480)
-  args = parser.parse_args()
-
-  run(args.model, args.displayMode, int(args.numThreads),
-      bool(args.enableEdgeTPU), int(args.cameraId), args.frameWidth,
-      args.frameHeight)
-
 if __name__ == '__main__':
-  main()
+  run("deeplabv3.tflite", "overlay", 4, False, 0, 640, 480)
