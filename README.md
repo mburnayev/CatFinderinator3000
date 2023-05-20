@@ -12,7 +12,7 @@ At the most abstracted level, this is a visualization of the project.
 - Python
 - Dart
 - OpenCV
-- Semantic Segmentation using Pixellib
+- Semantic Segmentation using Tensorflow
 - Flutter app framework
 - Firebase Authentication
 - Firebase Cloud Storage
