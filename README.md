@@ -11,7 +11,9 @@ At the most abstracted level, this is a visualization of the project.
 ## Technologies used
 - Python
 - Dart
+- Kaggle
 - OpenCV
+- Custom Model Trainer using Tensorflow
 - Semantic Segmentation using Tensorflow
 - Flutter app framework
 - Firebase Authentication
