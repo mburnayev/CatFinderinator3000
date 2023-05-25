@@ -20,3 +20,6 @@ At the most abstracted level, this is a visualization of the project.
 - Firebase Cloud Storage
 - Autodesk Fusion 360
 - UltiMaker Cura
+
+## Project Obstacles
+- Installing the tflite-model-maker library
