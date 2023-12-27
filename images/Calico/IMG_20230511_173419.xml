@@ -1,0 +1,26 @@
+<annotation>
+	<folder>data</folder>
+	<filename>IMG_20230511_173419.jpg</filename>
+	<path>/Users/misha/Downloads/data/IMG_20230511_173419.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>3024</width>
+		<height>3024</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>Calico</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1473</xmin>
+			<ymin>1107</ymin>
+			<xmax>2273</xmax>
+			<ymax>1900</ymax>
+		</bndbox>
+	</object>
+</annotation>

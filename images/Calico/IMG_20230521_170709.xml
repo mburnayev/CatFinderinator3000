@@ -1,0 +1,26 @@
+<annotation>
+	<folder>train</folder>
+	<filename>IMG_20230521_170709.jpg</filename>
+	<path>/Users/misha/Downloads/data/images/train/IMG_20230521_170709.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>3024</width>
+		<height>3024</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>Calico</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>694</xmin>
+			<ymin>417</ymin>
+			<xmax>1953</xmax>
+			<ymax>1286</ymax>
+		</bndbox>
+	</object>
+</annotation>
