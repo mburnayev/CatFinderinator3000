@@ -21,10 +21,19 @@ At the most abstracted level, this is a visualization of the project.
 - Autodesk Fusion 360
 - UltiMaker Cura
 
-## Project Obstacle Breakdown
+## Project Obstacles Breakdown
 Obstacle | Notes | Resolved?
 --- | --- | ---
-Finding instructions on how to create a custom tensorflow(lite) model |  | ✅ 
-Find an instructive Google Colab on custom model training | Google created many TFLite Google Colabs back in 2021, none of them worked | ❎
-Installing the tflite-model-maker library | couldn't do it because ScaNN is for x86 only, found a workaround using Kali Linux using UTM | ✅
+Creating a foundation for an app that can display videos | - | ✅
+Preliminary app testing  on Web | - | ✅
+Preliminary app testing  on Android (2023) | Spent a lot of time amending Gradle and Kotlin files to use correct SDK versions and dependencies | ✅
+Preliminary app testing on iOS | Spent around a week or two working with CocoaPods, got it to deploy on an iPad, then something stopped working. No more iOS development. | ❎
+Finding instructions on how to create a custom Tensorflow(lite) model | - | ✅ 
+Finding an instructive Google Colab on custom model training | Google created many TFLite Google Colabs back in 2021, sadly none of them worked in the cloud | ❎
+Installing the tflite-model-maker package | Couldn't do it because ScaNN is for x86 only, found a workaround using Kali Linux using [UTM](https://mac.getutm.app/) | ✅
+Training and Validating a TFLite model | The model wasn't very good, had 100% accuracy, see pictures below | 🆗
+Installing OpenCV and Tensorflow for Python 3.7 (or 3.4, I forget) on the RPi 3 (2023) | Dependency hell is real and I won after several weeks | ✅
+Deploying the model and inferencing | Crummy model produced crummy results. Also it ran at low single digit fps and detected nothing | 🆗
 
+
+Installing OpenCV 
