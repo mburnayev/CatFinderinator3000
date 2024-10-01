@@ -10,30 +10,39 @@ At the most abstracted level, this is a visualization of the project.
 
 ## Technologies used
 - Python
-- Dart
-- Flutter app framework
+- Dart + Flutter
 - Kaggle
 - OpenCV
 - ~~Custom Model Trainer using Tensorflow~~
 - ~~Semantic Segmentation using Tensorflow~~
 - Firebase Authentication
 - Firebase Cloud Storage
-- Autodesk Fusion 360
-- UltiMaker Cura
+- Autodesk Fusion 360 + UltiMaker Cura
 
 ## Project Obstacles Breakdown
 Obstacle | Notes | Resolved?
 --- | --- | ---
-Creating a foundation for an app that can display videos | - | ✅
-Preliminary app testing  on Web | - | ✅
-Preliminary app testing  on Android (2023) | Spent a lot of time amending Gradle and Kotlin files to use correct SDK versions and dependencies | ✅
-Preliminary app testing on iOS | Spent around a week or two working with CocoaPods, got it to deploy on an iPad, then something stopped working. No more iOS development. | ❎
-Finding instructions on how to create a custom Tensorflow(lite) model | - | ✅ 
-Finding an instructive Google Colab on custom model training | Google created many TFLite Google Colabs back in 2021, sadly none of them worked in the cloud | ❎
-Installing the tflite-model-maker package | Couldn't do it because ScaNN is for x86 only, found a workaround using Kali Linux using [UTM](https://mac.getutm.app/) | ✅
-Training and Validating a TFLite model | The model wasn't very good, had 100% accuracy, see pictures below | 🆗
-Installing OpenCV and Tensorflow for Python 3.7 (or 3.4, I forget) on the RPi 3 (2023) | Dependency hell is real and I won after several weeks | ✅
-Deploying the model and inferencing | Crummy model produced crummy results. Also it ran at low single digit fps and detected nothing | 🆗
-
-
-Installing OpenCV 
+Create a foundation for an app that can display videos | - | ✅
+Preliminary app testing on Web | - | ✅
+Preliminary app testing on Android (2023) | Spent a lot of time amending Gradle and Kotlin files to use correct SDK versions and dependencies | ✅
+Preliminary app testing on iOS | Spent around a week or two working with CocoaPods, got it to deploy on an iPad, then something stopped working. No more iOS development. Too much headache| ❎
+Set up Firebase Authentication and Cloud Storage and configuring app to use it | Piece of cake, thanks Google | ✅
+Find instructions on how to create a custom Tensorflow(lite) model | - | ✅ 
+Find an instructive Google Colab on custom model training | Google created many TFLite Google Colabs back in 2021, sadly none of them worked in the cloud | ❎
+Install the tflite-model-maker package | Couldn't do it because ScaNN is for x86 only, found a workaround using Kali Linux using [UTM](https://mac.getutm.app/) | ✅
+Train and Validate a TFLite model | The model wasn't very good and had 100% accuracy, see pictures below | 🆗
+Install OpenCV and Tensorflow for Python 3.7 on the RPi 3 (2023) | Dependency hell is real and there is no greater test of patience than that, but I won after I think a month | ✅
+Deploy the model and perform inferencing | Crummy model produced crummy results. Also it ran at low single digit fps and detected nothing | 🆗
+Put everything together (2023) | Bad model, poor performance, didn't implement recording functionality and dropped project | ❎
+\- | **Hiatus** | -
+Start project back up | I cannot run main.py and OpenCV is generating a slew of errors | ❎
+Install different Python versions to fix OpenCV | Some Python builds broke altogether and others failed to install OpenCV | ❎
+\- | **Hiatus** | -
+Start project back up again | Still can't run main.py and OpenCV continues to malfunction | 🆗
+Install different Python versions to fix OpenCV | Success! Kind of. Python 3.9.2 and opencv-python==4.5.5.64 work, but now Numpy is having issues | 🆗
+Install different Python versions to fix Numpy | Success! Now I can't install OpenCV! | 🆗
+3D print a stand for the camera and extra RPi fan | Thank you Skibidi Labib <3 | ✅
+Look into PyTorch for object detection | - | ✅
+Install PyTorch | pip can't find PyTorch | ❎
+Abandon Tensorflow and Pytorch | both machine learning libraries are meant to be built for 64-bit systems and mine is a 32-bit system (and I can't be bothered to flash a different image) | ✅
+Installing OpenCV again | In progress | ?
