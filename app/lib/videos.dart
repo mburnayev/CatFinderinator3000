@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cat_finderinator_threethousand/videoPlayer.dart';
+import 'package:cat_finderinator_threethousand/video_player.dart';
 
-// Home entrypoint
-class Home extends StatefulWidget {
-  const Home({super.key});
+class Videos extends StatefulWidget {
+  const Videos({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Videos> createState() => _VideosState();
 }
 
-class _HomeState extends State<Home> {
+class _VideosState extends State<Videos> {
   // reference to Firebase Cloud Storage bucket using earlier credentials
   final storageRef = FirebaseStorage.instance.ref().child("videos");
   // video names list

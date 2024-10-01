@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:video_player/video_player.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-// Video entrypoint
 class Video extends StatelessWidget {
   final String name;
   const Video({super.key, required this.name});
