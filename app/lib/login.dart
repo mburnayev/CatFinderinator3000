@@ -1,6 +1,11 @@
+// --- Dart/Flutter libraries ---
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+
+// --- Miscellaneous Libraries
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+// --- Local Package Files ---
 import 'package:cat_finderinator_threethousand/videos.dart';
 
 class Login extends StatefulWidget {
@@ -23,22 +28,24 @@ class _LoginState extends State<Login> {
           color: Colors.white, // Text color
         ),
       ),
-      centerTitle: true, // Center the title
-      backgroundColor: Colors.deepPurple, // Background color
-      elevation: 4, // Shadow effect
+      centerTitle: true,
+      // Center the title
+      backgroundColor: Colors.deepPurple,
+      // Background color
+      elevation: 4,
+      // Shadow effect
       actions: [
         IconButton(
-          icon: const Icon(Icons.stop),
-          tooltip: 'Debug',
-          onPressed: () async {
-            const url = 'https://github.com/mburnayev';
-            if (await canLaunchUrlString(url)) {
-              await launchUrlString(url);
-            } else {
-              throw 'Could not launch $url';
-            }
-          }
-        ),
+            icon: const Icon(Icons.stop),
+            tooltip: 'Debug',
+            onPressed: () async {
+              const url = 'https://github.com/mburnayev';
+              if (await canLaunchUrlString(url)) {
+                await launchUrlString(url);
+              } else {
+                throw 'Could not launch $url';
+              }
+            }),
       ],
     );
   }
@@ -66,16 +73,15 @@ class _LoginState extends State<Login> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: ElevatedButton(
-        onPressed: () => action(),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blue,
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+          onPressed: () => action(),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
           ),
-        ),
-        child: Text(text)
-      ),
+          child: Text(text)),
     );
   }
 
@@ -85,17 +91,17 @@ class _LoginState extends State<Login> {
         appBar: topBar,
         body: Form(
             child: Column(
-              children: <Widget>[
-                inputField("Email (Username)", emailCtrl, false),
-                inputField("Password", pwdCtrl, true),
-                Container(height: 20),
-                Row(children: <Widget>[
-                  loginActionButton("Forgot Password?", forgotPassword),
-                  loginActionButton("Sign Up", login),
-                  loginActionButton("Log in", login)
-                ])
-              ],
-            )));
+          children: <Widget>[
+            inputField("Email (Username)", emailCtrl, false),
+            inputField("Password", pwdCtrl, true),
+            Container(height: 20),
+            Row(children: <Widget>[
+              loginActionButton("Forgot Password?", forgotPassword),
+              loginActionButton("Sign Up", login),
+              loginActionButton("Log in", login)
+            ])
+          ],
+        )));
   }
 
   // Alert popup in the event a user with invalid credentials tries to log in
@@ -106,7 +112,7 @@ class _LoginState extends State<Login> {
   }
 
   // gives or denies access depending on user's presence in Firebase Auth db
-  Future login() async {
+  Future<void> login() async {
     try {
       // determines whether user credentials are in Firebase Auth
       await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -120,7 +126,7 @@ class _LoginState extends State<Login> {
     }
   }
 
-  Future forgotPassword() async {
+  Future<void> forgotPassword() async {
     String emailText = emailCtrl.text;
     if (emailText.isNotEmpty) {
       try {
@@ -128,8 +134,7 @@ class _LoginState extends State<Login> {
       } catch (err) {
         print(err.toString());
       }
-    }
-    else {
+    } else {
       print("new dialogue here");
     }
   }

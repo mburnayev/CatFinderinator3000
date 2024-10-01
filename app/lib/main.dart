@@ -1,6 +1,11 @@
+// --- Dart/Flutter libraries ---
 import 'package:flutter/material.dart';
+
+// --- Miscellaneous Libraries
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+// --- Local Package Files ---
 import 'package:cat_finderinator_threethousand/login.dart';
 
 // App entrypoint, initializes Firebase project
@@ -18,5 +23,4 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(home: Login());
   }
-
 }

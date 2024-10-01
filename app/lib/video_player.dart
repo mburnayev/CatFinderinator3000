@@ -1,10 +1,14 @@
-import 'package:flutter/material.dart';
+// --- Dart/Flutter libraries ---
 import 'dart:async';
+import 'package:flutter/material.dart';
+
+// --- Miscellaneous Libraries
 import 'package:video_player/video_player.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class Video extends StatelessWidget {
   final String name;
+
   const Video({super.key, required this.name});
 
   @override
@@ -16,6 +20,7 @@ class Video extends StatelessWidget {
 class VideoPlayerScreen extends StatefulWidget {
   // video name
   final String name;
+
   const VideoPlayerScreen({super.key, required this.name});
 
   @override
@@ -33,7 +38,7 @@ class _VideoState extends State<VideoPlayerScreen> {
   void initState() {
     super.initState();
     getVideo();
-    _controller = VideoPlayerController.network(videoURLName);
+    _controller = VideoPlayerController.networkUrl(Uri.parse(videoURLName));
     _initVPFuture = _controller.initialize();
   }
 
@@ -41,7 +46,7 @@ class _VideoState extends State<VideoPlayerScreen> {
   Future<void> getVideo() async {
     final videoURL = await storageRef.child(widget.name).getDownloadURL();
     videoURLName = videoURL;
-    _controller = VideoPlayerController.network(videoURLName);
+    _controller = VideoPlayerController.networkUrl(Uri.parse(videoURLName));
     _initVPFuture = _controller.initialize();
     _controller.setLooping(true);
   }
@@ -63,20 +68,16 @@ class _VideoState extends State<VideoPlayerScreen> {
       // the AppBar widget apparently comes with a back button?
       appBar: AppBar(title: Text(widget.name)),
       body: FutureBuilder(
-        future: _initVPFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller)
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator()
-            );
-          }
-        }
-      ),
+          future: _initVPFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: VideoPlayer(_controller));
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          }),
       floatingActionButton: playPauseButton,
     );
   }
@@ -85,13 +86,12 @@ class _VideoState extends State<VideoPlayerScreen> {
     return FloatingActionButton(
         onPressed: () {
           setState(() {
-            _controller.value.isPlaying ? _controller.pause() : _controller.play();
+            _controller.value.isPlaying
+                ? _controller.pause()
+                : _controller.play();
           });
         },
-        child: Icon(
-            _controller.value.isPlaying ? Icons.pause : Icons.play_arrow
-        )
-    );
+        child:
+            Icon(_controller.value.isPlaying ? Icons.pause : Icons.play_arrow));
   }
-
 }
