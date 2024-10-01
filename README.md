@@ -11,15 +11,20 @@ At the most abstracted level, this is a visualization of the project.
 ## Technologies used
 - Python
 - Dart
+- Flutter app framework
 - Kaggle
 - OpenCV
-- Custom Model Trainer using Tensorflow
-- Semantic Segmentation using Tensorflow
-- Flutter app framework
+- ~~Custom Model Trainer using Tensorflow~~
+- ~~Semantic Segmentation using Tensorflow~~
 - Firebase Authentication
 - Firebase Cloud Storage
 - Autodesk Fusion 360
 - UltiMaker Cura
 
-## Project Obstacles
-- Installing the tflite-model-maker library
+## Project Obstacle Breakdown
+Obstacle | Notes | Resolved?
+--- | --- | ---
+Finding instructions on how to create a custom tensorflow(lite) model |  | ✅ 
+Find an instructive Google Colab on custom model training | Google created many TFLite Google Colabs back in 2021, none of them worked | ❎
+Installing the tflite-model-maker library | couldn't do it because ScaNN is for x86 only, found a workaround using Kali Linux using UTM | ✅
+
