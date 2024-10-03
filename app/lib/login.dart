@@ -21,6 +21,11 @@ class _LoginState extends State<Login> {
 
   PreferredSizeWidget get topBar {
     return AppBar(
+      actions: [
+        iconTemplate("icon/github_icon.jpeg", "https://github.com/mburnayev"),
+        iconTemplate("icon/linkedin_icon.jpeg",
+            "https://www.linkedin.com/in/misha-burnayev/")
+      ],
       title: const Text(
         "CatFinderinator3000 Login Page",
         style: TextStyle(
@@ -31,19 +36,21 @@ class _LoginState extends State<Login> {
       centerTitle: true,
       backgroundColor: Colors.deepPurple,
       elevation: 4,
-      actions: [
-        IconButton(
-            icon: const Icon(Icons.stop),
-            onPressed: () async {
-              const url = 'https://github.com/mburnayev';
-              if (await canLaunchUrlString(url)) {
-                await launchUrlString(url);
-              } else {
-                throw 'Could not launch $url';
-              }
-            }),
-      ],
     );
+  }
+
+  Widget iconTemplate(String iconPath, String url) {
+    return IconButton(
+        icon: ImageIcon(
+          AssetImage(iconPath),
+          size: 24,
+          color: Colors.white
+        ),
+        onPressed: () async {
+          if (await canLaunchUrlString(url)) {
+            await launchUrlString(url);
+          }
+        });
   }
 
   // generalized widget for the input fields
@@ -119,7 +126,7 @@ class _LoginState extends State<Login> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               loginActionButton("Forgot Password?", forgotPassword),
-              loginActionButton("Sign Up", login),
+              loginActionButton("Sign Up", register),
               loginActionButton("Log in", login),
             ],
           ),
@@ -137,45 +144,69 @@ class _LoginState extends State<Login> {
     );
   }
 
-  // Alert popup in the event a user with invalid credentials tries to log in
-  Widget get bagLoginAlert {
-    return const AlertDialog(
-        title: Text("Login error"),
-        content: Text("Invalid username and/or password"));
+  void alertTemplate(String errorTitle, String errorBody) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) =>
+            AlertDialog(title: Text(errorTitle), content: Text(errorBody)));
   }
 
-  void onFailure() {
-    showDialog(
-        context: context, builder: (BuildContext context) => bagLoginAlert);
+  Future<void> register() async {
+    String emailText = emailCtrl.text;
+    String pwdText = pwdCtrl.text;
+    if (emailText.isNotEmpty && pwdText.isNotEmpty) {
+      try {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: emailText, password: pwdText);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          alertTemplate(
+              "Account creation error", "The password provided is too weak!");
+        } else if (e.code == 'email-already-in-use') {
+          alertTemplate("Account creation error",
+              "The account already exists for that email!");
+        }
+      } catch (e) {
+        alertTemplate(
+            "Account creation error", "Something went unexpectedly wrong!");
+      }
+    } else {
+      alertTemplate("Account creation error",
+          "You need to enter valid credentials to create a new account!");
+    }
   }
 
   // gives or denies access depending on user's presence in Firebase Auth db
   Future<void> login() async {
-    try {
-      // determines whether user credentials are in Firebase Auth
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailCtrl.text, password: pwdCtrl.text);
-      if (context.mounted) {
+    if (context.mounted) {
+      try {
+        // determines whether user credentials are in Firebase Auth
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: emailCtrl.text, password: pwdCtrl.text);
+
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => const Videos()));
         emailCtrl.clear();
         pwdCtrl.clear();
+      } catch (e) {
+        alertTemplate("Login error", "Invalid username and/or password!");
       }
-    } catch (e) {
-      onFailure();
     }
   }
 
+  // sends an email with a link to reset your password given a username/email
   Future<void> forgotPassword() async {
     String emailText = emailCtrl.text;
     if (emailText.isNotEmpty) {
       try {
         await FirebaseAuth.instance.sendPasswordResetEmail(email: emailText);
       } catch (err) {
-        print(err.toString());
+        alertTemplate(
+            "Password reset error", "Password reset email failed to send!");
       }
     } else {
-      print("new dialogue here");
+      alertTemplate("Password reset error",
+          "Please enter an associated email to reset a password for!");
     }
   }
 }
