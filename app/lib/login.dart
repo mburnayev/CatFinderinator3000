@@ -17,27 +17,23 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   // controller used to intake user credentials
-  final emailCtrl = TextEditingController(), pwdCtrl = TextEditingController();
+  var emailCtrl = TextEditingController(), pwdCtrl = TextEditingController();
 
   PreferredSizeWidget get topBar {
     return AppBar(
       title: const Text(
         "CatFinderinator3000 Login Page",
         style: TextStyle(
-          fontSize: 24, // Increased font size
+          fontSize: 24, // Increased font size\
           color: Colors.white, // Text color
         ),
       ),
       centerTitle: true,
-      // Center the title
       backgroundColor: Colors.deepPurple,
-      // Background color
       elevation: 4,
-      // Shadow effect
       actions: [
         IconButton(
             icon: const Icon(Icons.stop),
-            tooltip: 'Debug',
             onPressed: () async {
               const url = 'https://github.com/mburnayev';
               if (await canLaunchUrlString(url)) {
@@ -75,7 +71,7 @@ class _LoginState extends State<Login> {
       child: ElevatedButton(
           onPressed: () => action(),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.deepPurple,
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
@@ -85,23 +81,60 @@ class _LoginState extends State<Login> {
     );
   }
 
+  // generalized widget for the images
+  Widget imageTemplate(String imgPath, bool isFixed) {
+    Widget fixed = Expanded(
+      child: Image.asset(
+        imgPath,
+        fit: BoxFit.fill,
+      ),
+    );
+
+    Widget flexible = Expanded(
+      child: Container(
+        constraints: BoxConstraints.expand(),
+        child: Image.asset(
+          imgPath,
+          fit: BoxFit.fill,
+        ),
+      ),
+    );
+
+    return isFixed ? fixed : flexible;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: topBar,
-        body: Form(
-            child: Column(
-          children: <Widget>[
-            inputField("Email (Username)", emailCtrl, false),
-            inputField("Password", pwdCtrl, true),
-            Container(height: 20),
-            Row(children: <Widget>[
+      appBar: topBar,
+      body: Form(
+          child: OverflowBox(
+              // maxWidth: MediaQuery.of(context).size.hright + 1,
+              child: Column(
+        children: <Widget>[
+          inputField("Email (Username)", emailCtrl, false),
+          inputField("Password", pwdCtrl, true),
+          Container(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
               loginActionButton("Forgot Password?", forgotPassword),
               loginActionButton("Sign Up", login),
-              loginActionButton("Log in", login)
-            ])
-          ],
-        )));
+              loginActionButton("Log in", login),
+            ],
+          ),
+          Container(height: 20),
+          Row(
+            children: <Widget>[
+              imageTemplate("fullres/login_cat_left.jpeg", true),
+              imageTemplate("fullres/login_cat_center.jpeg", true),
+              imageTemplate("fullres/login_cat_right.jpeg", true)
+            ],
+          ),
+          imageTemplate("fullres/login_cat_filler.jpeg", false)
+        ],
+      ))),
+    );
   }
 
   // Alert popup in the event a user with invalid credentials tries to log in
@@ -109,6 +142,11 @@ class _LoginState extends State<Login> {
     return const AlertDialog(
         title: Text("Login error"),
         content: Text("Invalid username and/or password"));
+  }
+
+  void onFailure() {
+    showDialog(
+        context: context, builder: (BuildContext context) => bagLoginAlert);
   }
 
   // gives or denies access depending on user's presence in Firebase Auth db
@@ -120,9 +158,11 @@ class _LoginState extends State<Login> {
       if (context.mounted) {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => const Videos()));
+        emailCtrl.clear();
+        pwdCtrl.clear();
       }
     } catch (e) {
-      showDialog(context: context, builder: (context) => bagLoginAlert);
+      onFailure();
     }
   }
 
