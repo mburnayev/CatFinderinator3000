@@ -16,24 +16,35 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  // controller used to intake user credentials
+  // Controller used to intake user credentials
   var emailCtrl = TextEditingController(), pwdCtrl = TextEditingController();
 
   PreferredSizeWidget get topBar {
     return AppBar(
-      actions: [
-        iconTemplate("icon/github_icon.jpeg", "https://github.com/mburnayev"),
-        iconTemplate("icon/linkedin_icon.jpeg",
-            "https://www.linkedin.com/in/misha-burnayev/")
-      ],
-      title: const Text(
-        "CatFinderinator3000 Login Page",
-        style: TextStyle(
-          fontSize: 24, // Increased font size\
-          color: Colors.white, // Text color
-        ),
+      actions: [],
+      title: Stack(
+        children: [
+          Row(
+            children: [
+              iconTemplate(
+                  "icon/github_icon.jpeg", "https://github.com/mburnayev"),
+              iconTemplate("icon/linkedin_icon.jpeg",
+                  "https://www.linkedin.com/in/misha-burnayev/"),
+              iconTemplate("icon/about_me_icon.jpeg", "https://www.google.com")
+            ],
+          ),
+          Center(
+            child: const Text(
+              "CatFinderinator3000 Login Page",
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       ),
-      centerTitle: true,
+      centerTitle: false,
       backgroundColor: Colors.deepPurple,
       elevation: 4,
     );
@@ -44,7 +55,7 @@ class _LoginState extends State<Login> {
         icon: ImageIcon(
           AssetImage(iconPath),
           size: 24,
-          color: Colors.white
+          color: Colors.white,
         ),
         onPressed: () async {
           if (await canLaunchUrlString(url)) {
@@ -56,7 +67,6 @@ class _LoginState extends State<Login> {
   // generalized widget for the input fields
   Widget inputField(String label, TextEditingController ctrl, bool obscure) {
     return SizedBox(
-        // width: 500,
         child: Padding(
             padding: const EdgeInsets.all(15),
             child: Column(children: <Widget>[
@@ -71,7 +81,7 @@ class _LoginState extends State<Login> {
             ])));
   }
 
-  // generalized widget for the buttons
+  // Generalized widget for the buttons
   Widget loginActionButton(String text, Function action) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -88,7 +98,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-  // generalized widget for the images
+  // Generalized widget for rendering images
   Widget imageTemplate(String imgPath, bool isFixed) {
     Widget fixed = Expanded(
       child: Image.asset(
@@ -110,40 +120,7 @@ class _LoginState extends State<Login> {
     return isFixed ? fixed : flexible;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: topBar,
-      body: Form(
-          child: OverflowBox(
-              // maxWidth: MediaQuery.of(context).size.hright + 1,
-              child: Column(
-        children: <Widget>[
-          inputField("Email (Username)", emailCtrl, false),
-          inputField("Password", pwdCtrl, true),
-          Container(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              loginActionButton("Forgot Password?", forgotPassword),
-              loginActionButton("Sign Up", register),
-              loginActionButton("Log in", login),
-            ],
-          ),
-          Container(height: 20),
-          Row(
-            children: <Widget>[
-              imageTemplate("fullres/login_cat_left.jpeg", true),
-              imageTemplate("fullres/login_cat_center.jpeg", true),
-              imageTemplate("fullres/login_cat_right.jpeg", true)
-            ],
-          ),
-          imageTemplate("fullres/login_cat_filler.jpeg", false)
-        ],
-      ))),
-    );
-  }
-
+  // Generalized call to display a dialogue
   void alertTemplate(String errorTitle, String errorBody) {
     showDialog(
         context: context,
@@ -151,6 +128,7 @@ class _LoginState extends State<Login> {
             AlertDialog(title: Text(errorTitle), content: Text(errorBody)));
   }
 
+  // Adds user to the db if they don't exist, otherwise display appropriate dialogue
   Future<void> register() async {
     String emailText = emailCtrl.text;
     String pwdText = pwdCtrl.text;
@@ -158,6 +136,7 @@ class _LoginState extends State<Login> {
       try {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: emailText, password: pwdText);
+        alertTemplate("Account successfully created!", "");
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           alertTemplate(
@@ -176,7 +155,7 @@ class _LoginState extends State<Login> {
     }
   }
 
-  // gives or denies access depending on user's presence in Firebase Auth db
+  // Gives or denies access depending on user's presence in Firebase Auth db
   Future<void> login() async {
     if (context.mounted) {
       try {
@@ -194,7 +173,7 @@ class _LoginState extends State<Login> {
     }
   }
 
-  // sends an email with a link to reset your password given a username/email
+  // Sends an email with a link to reset your password given a username/email
   Future<void> forgotPassword() async {
     String emailText = emailCtrl.text;
     if (emailText.isNotEmpty) {
@@ -208,5 +187,38 @@ class _LoginState extends State<Login> {
       alertTemplate("Password reset error",
           "Please enter an associated email to reset a password for!");
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: topBar,
+      body: Form(
+          child: OverflowBox(
+              child: Column(
+                children: <Widget>[
+                  inputField("Email (Username)", emailCtrl, false),
+                  inputField("Password", pwdCtrl, true),
+                  Container(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      loginActionButton("Forgot Password?", forgotPassword),
+                      loginActionButton("Sign Up", register),
+                      loginActionButton("Log in", login),
+                    ],
+                  ),
+                  Container(height: 20),
+                  Row(
+                    children: <Widget>[
+                      imageTemplate("fullres/login_cat_left.jpeg", true),
+                      imageTemplate("fullres/login_cat_center.jpeg", true),
+                      imageTemplate("fullres/login_cat_right.jpeg", true)
+                    ],
+                  ),
+                  imageTemplate("fullres/login_cat_filler.jpeg", false)
+                ],
+              ))),
+    );
   }
 }
