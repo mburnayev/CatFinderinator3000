@@ -19,16 +19,60 @@ class _VideosState extends State<Videos> {
 
   List<String> videoNamesList = [];
 
+  // Retrieves video names from Firebase Cloud Storage bucket
+  Future<void> getResults() {
+    return storageRef.listAll().then((listResult) {
+      for (var item in listResult.items) {
+        videoNamesList.add(item.name);
+      }
+    });
+  }
+
+  // Customized AppBar
   PreferredSizeWidget get topBar {
     return AppBar(backgroundColor: Colors.deepPurple,
       elevation: 4,
       title: Center(
-          child: const Text("Videos!!",
+          child: const Text("(Hopefully) Cat Videos!!!",
               style: TextStyle(
                 fontSize: 24,
                 color: Colors.white
               )))
     );
+  }
+
+  // Scaffold that is used when no videos are present in videos list
+  Widget get noVideosScaffold {
+    return Scaffold(
+        appBar: topBar,
+        body: Center(
+            child: Text(
+              "No recent cat recordings — stay tuned!",
+              style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 30
+              ),
+              textAlign: TextAlign.center,
+            )));
+  }
+
+  // Scaffold that is used when >= 1 videos are present in videos list,
+  // Redirects user to corresponding video when video name tapped/pressed
+  Widget get videoListScaffold {
+    return Scaffold(
+        appBar: topBar,
+        body: ListView.separated(
+            separatorBuilder: (context, index) => const Divider(),
+            itemCount: videoNamesList.length,
+            itemBuilder: (context, index) {
+              return ElevatedButton(
+                  child: Text(videoNamesList[index].toString()),
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              Video(name: videoNamesList[index]))));
+            }));
   }
 
   // Buffers then retrieves correct Scaffold depending on number of videos
@@ -51,47 +95,6 @@ class _VideosState extends State<Videos> {
         }
       },
     );
-  }
-
-  // Retrieves video names from Firebase Cloud Storage bucket
-  Future<void> getResults() {
-    return storageRef.listAll().then((listResult) {
-      for (var item in listResult.items) {
-        videoNamesList.add(item.name);
-      }
-    });
-  }
-
-  Widget get noVideosScaffold {
-    return Scaffold(
-        appBar: topBar,
-        body: Center(
-            child: Text(
-          "No recent cat recordings — stay tuned!",
-          style: TextStyle(
-            color: Colors.blue,
-            fontSize: 30
-          ),
-          textAlign: TextAlign.center,
-        )));
-  }
-
-  // Redirects user to corresponding video when video name tapped/pressed
-  Widget get videoListScaffold {
-    return Scaffold(
-        appBar: topBar,
-        body: ListView.separated(
-            separatorBuilder: (context, index) => const Divider(),
-            itemCount: videoNamesList.length,
-            itemBuilder: (context, index) {
-              return ElevatedButton(
-                  child: Text(videoNamesList[index].toString()),
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              Video(name: videoNamesList[index]))));
-            }));
   }
 
   @override

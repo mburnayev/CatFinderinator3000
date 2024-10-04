@@ -19,37 +19,7 @@ class _LoginState extends State<Login> {
   // Controller used to intake user credentials
   var emailCtrl = TextEditingController(), pwdCtrl = TextEditingController();
 
-  PreferredSizeWidget get topBar {
-    return AppBar(
-      actions: [],
-      title: Stack(
-        children: [
-          Row(
-            children: [
-              iconTemplate(
-                  "icon/github_icon.jpeg", "https://github.com/mburnayev"),
-              iconTemplate("icon/linkedin_icon.jpeg",
-                  "https://www.linkedin.com/in/misha-burnayev/"),
-              iconTemplate("icon/about_me_icon.jpeg", "https://www.google.com")
-            ],
-          ),
-          Center(
-            child: const Text(
-              "CatFinderinator3000 Login Page",
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
-      centerTitle: false,
-      backgroundColor: Colors.deepPurple,
-      elevation: 4,
-    );
-  }
-
+  // Generalized widget for adding icons
   Widget iconTemplate(String iconPath, String url) {
     return IconButton(
         icon: ImageIcon(
@@ -64,7 +34,7 @@ class _LoginState extends State<Login> {
         });
   }
 
-  // generalized widget for the input fields
+  // Generalized widget for the input fields
   Widget inputField(String label, TextEditingController ctrl, bool obscure) {
     return SizedBox(
         child: Padding(
@@ -126,6 +96,38 @@ class _LoginState extends State<Login> {
         context: context,
         builder: (BuildContext context) =>
             AlertDialog(title: Text(errorTitle), content: Text(errorBody)));
+  }
+
+  // Customized AppBar
+  PreferredSizeWidget get topBar {
+    return AppBar(
+      actions: [],
+      title: Stack(
+        children: [
+          Row(
+            children: [
+              iconTemplate(
+                  "icon/github_icon.jpeg", "https://github.com/mburnayev"),
+              iconTemplate("icon/linkedin_icon.jpeg",
+                  "https://www.linkedin.com/in/misha-burnayev/"),
+              iconTemplate("icon/about_me_icon.jpeg", "https://www.google.com")
+            ],
+          ),
+          Center(
+            child: const Text(
+              "CatFinderinator3000 Login Page",
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+      centerTitle: false,
+      backgroundColor: Colors.deepPurple,
+      elevation: 4,
+    );
   }
 
   // Adds user to the db if they don't exist, otherwise display appropriate dialogue

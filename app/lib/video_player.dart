@@ -13,15 +13,14 @@ class Video extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: VideoPlayerScreen(name: name));
+    return Scaffold(body: VideoPlayerScreen(videoName: name));
   }
 }
 
 class VideoPlayerScreen extends StatefulWidget {
-  // video name
-  final String name;
+  final String videoName;
 
-  const VideoPlayerScreen({super.key, required this.name});
+  const VideoPlayerScreen({super.key, required this.videoName});
 
   @override
   State<VideoPlayerScreen> createState() => _VideoState();
@@ -33,7 +32,7 @@ class _VideoState extends State<VideoPlayerScreen> {
   late VideoPlayerController _controller;
   late Future<void> _initVPFuture;
 
-  // initialize video controllers while asynchronously fetching video
+  // Initialize video controllers while asynchronously fetching video
   @override
   void initState() {
     super.initState();
@@ -42,9 +41,9 @@ class _VideoState extends State<VideoPlayerScreen> {
     _initVPFuture = _controller.initialize();
   }
 
-  // retrieve video and have controllers update to display video
+  // Retrieve video and have controllers update to display video
   Future<void> getVideo() async {
-    final videoURL = await storageRef.child(widget.name).getDownloadURL();
+    final videoURL = await storageRef.child(widget.videoName).getDownloadURL();
     videoURLName = videoURL;
     _controller = VideoPlayerController.networkUrl(Uri.parse(videoURLName));
     _initVPFuture = _controller.initialize();
@@ -57,16 +56,21 @@ class _VideoState extends State<VideoPlayerScreen> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return singleVideo;
+  // Customized AppBar
+  PreferredSizeWidget get topBar {
+    return AppBar(
+        backgroundColor: Colors.deepPurple,
+        elevation: 4,
+        title: Center(
+            child: Text(widget.videoName,
+                style: TextStyle(fontSize: 24, color: Colors.white))));
   }
 
-  // adds watchable video, play and pause options, buttons to go back to Home
+  // Adds watchable video, play and pause options, buttons to go back to Home
   Widget get singleVideo {
     return Scaffold(
-      // the AppBar widget apparently comes with a back button?
-      appBar: AppBar(title: Text(widget.name)),
+      // The AppBar widget apparently comes with a back button?
+      appBar: topBar,
       body: FutureBuilder(
           future: _initVPFuture,
           builder: (context, snapshot) {
@@ -93,5 +97,10 @@ class _VideoState extends State<VideoPlayerScreen> {
         },
         child:
             Icon(_controller.value.isPlaying ? Icons.pause : Icons.play_arrow));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return singleVideo;
   }
 }
