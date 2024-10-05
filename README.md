@@ -44,4 +44,5 @@ Install different Python versions to fix Numpy | Success! Now I can't install Op
 Look into PyTorch for object detection | - | ✅
 Install PyTorch | pip can't find PyTorch | ❎
 Abandon Tensorflow and Pytorch | Both ML libraries are built for 64-bit systems and mine is a 32-bit system (flashing a new 64-bit image is too much), and they run like crud anyways | ✅
-Installing OpenCV again | In progress | ?
+Installing OpenCV again | Flashed a new 64-bit Raspbian image onto the Pi and installed OpenCV for 3.9.2 | ✅
+
