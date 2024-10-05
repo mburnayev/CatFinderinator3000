@@ -49,4 +49,4 @@ Set static IP address for RPi | - | ✅
 Set up X11 forwarding for remote viewing of OpenCV video feed | holy crap I can't believe this worked, I almost opened a new can of worms looking at qt.qpa plugins for solutions... thank God this works |  ✅
 Add motion detection algorithm | in progress | -
 Add automated recording | in progress | -
-
+Adjust X11 forwarding to update feed faster and not tamper with FPS | in progress | -
