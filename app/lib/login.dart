@@ -78,7 +78,7 @@ class _LoginState extends State<Login> {
     );
 
     Widget flexible = Expanded(
-      child: Container(
+      child: ConstrainedBox(
         constraints: BoxConstraints.expand(),
         child: Image.asset(
           imgPath,
