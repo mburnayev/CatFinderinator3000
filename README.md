@@ -1,22 +1,28 @@
 # CatFinderinator3000
-Fun little multifaceted project that uses a variety of technologies I've touched down on in the past and/or wanted to use.
+Fun(?) little multifaceted project that uses a variety of technologies I've touched down on in the past and/or wanted to use.
 
 ## Project overview
-This system is composed of a computer with a camera, an image segmentation model trained to detect calico cats, code on the computer that will record a video if the camera using the model detects a calico cat, more code that will push the recorded video to a database, and a user phone with an app that can retrieve uploaded videos from the database.
+This system is comprised of 3 main components:
+- Raspberry Pi 4 (with camera and machine learning model, and Python script making use of both)
+- Firebase (for app authentication and database)
+- Cross-platform application (written in Dart, using Flutter)
 
-At the most abstracted level, this is a visualization of the project.
+The systems starts with the RPi, which is trained to detect calico cats (or just my cat), which has a perpetually running Python script that will record a short video if my cat is detected in the live feed. Having recording the video, the script will push the recorded video to a database, which can then be accessed on any platform through an app I created that retrieves the recorded videos from the database.
+
+Here is an abstracted visualization of the project that the above text describes. This needs to be updated...
 
 <img width="563" alt="Screenshot 2023-05-10 at 12 43 26 PM (2)" src="https://github.com/Mooobert/CatFinderinator3000/assets/82725378/e32655af-2f40-4ecb-b26d-d1ba49db03fc">
 
 ## Technologies used
 - Python
 - Dart + Flutter
-- Kaggle
+- labelImg + Kaggle
 - OpenCV
-- ~~Custom Model Trainer using Tensorflow~~
-- ~~Semantic Segmentation using Tensorflow~~
+- Custom Model Trainer using Tensorflow
 - Firebase Authentication
 - Firebase Cloud Storage
+- UTM
+- Linux (Raspian, Kali Linux)
 
 ## Project Obstacles Breakdown
 Obstacle | Notes | Resolved?
@@ -47,6 +53,6 @@ Abandon Tensorflow and Pytorch | Both ML libraries are built for 64-bit systems 
 Install OpenCV again | Flashed a new 64-bit Raspbian image onto the Pi and installed OpenCV for Python 3.9.2 | ✅
 Set static IP address for RPi | - | ✅
 Set up X11 forwarding for remote viewing of OpenCV video feed | holy crap I can't believe this worked, I almost opened a new can of worms looking at qt.qpa plugins for solutions... thank God this works |  ✅
+Adjust X11 forwarding to update feed faster and not tamper with FPS | not necessary in retrospect, this was just for debugging | ❎
 Add motion detection algorithm | in progress | -
 Add automated recording | in progress | -
-Adjust X11 forwarding to update feed faster and not tamper with FPS | in progress | -
