@@ -43,6 +43,10 @@ Install different Python versions to fix Numpy | Success! Now I can't install Op
 3D print a stand for the camera and a fan | Thank you Skibidi Labib <3 | ✅
 Look into PyTorch for object detection | - | ✅
 Install PyTorch | pip can't find PyTorch | ❎
-Abandon Tensorflow and Pytorch | Both ML libraries are built for 64-bit systems and mine is a 32-bit system (flashing a new 64-bit image is too much), and they run like crud anyways | ✅
-Installing OpenCV again | Flashed a new 64-bit Raspbian image onto the Pi and installed OpenCV for 3.9.2 | ✅
+Abandon Tensorflow and Pytorch | Both ML libraries are built for 64-bit systems and mine is a 32-bit system, and they run like crud anyways | ✅
+Install OpenCV again | Flashed a new 64-bit Raspbian image onto the Pi and installed OpenCV for Python 3.9.2 | ✅
+Set static IP address for RPi | - | ✅
+Set up X11 forwarding for remote viewing of OpenCV video feed | holy crap I can't believe this worked, I almost opened a new can of worms looking at qt.qpa plugins for solutions... thank God this works |  ✅
+Add motion detection algorithm | in progress | -
+Add automated recording | in progress | -
 
