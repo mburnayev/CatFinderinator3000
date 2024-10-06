@@ -24,7 +24,6 @@ class _LoginState extends State<Login> {
     return IconButton(
         icon: ImageIcon(
           AssetImage(iconPath),
-          size: 24,
           color: Colors.white,
         ),
         onPressed: () async {
@@ -106,22 +105,23 @@ class _LoginState extends State<Login> {
         children: [
           Row(
             children: [
-              iconTemplate(
-                  "icon/github_icon.jpeg", "https://github.com/mburnayev"),
-              iconTemplate("icon/linkedin_icon.jpeg",
-                  "https://www.linkedin.com/in/misha-burnayev/"),
-              iconTemplate("icon/about_me_icon.jpeg", "https://www.google.com")
-            ],
-          ),
-          Center(
-            child: const Text(
-              "CatFinderinator3000 Login Page",
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.white,
+              Expanded(
+                child: const Text(
+                  "CatFinderinator3000",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
               ),
-            ),
-          ),
+              iconTemplate("assets/icon/github_icon.jpeg",
+                  "https://github.com/mburnayev"),
+              iconTemplate("assets/icon/linkedin_icon.jpeg",
+                  "https://www.linkedin.com/in/misha-burnayev/"),
+              iconTemplate(
+                  "assets/icon/about_me_icon.jpeg", "https://www.google.com"),
+              Container(width:20)
+            ],
+          )
         ],
       ),
       centerTitle: false,
@@ -198,29 +198,29 @@ class _LoginState extends State<Login> {
       body: Form(
           child: OverflowBox(
               child: Column(
-                children: <Widget>[
-                  inputField("Email (Username)", emailCtrl, false),
-                  inputField("Password", pwdCtrl, true),
-                  Container(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      loginActionButton("Forgot Password?", forgotPassword),
-                      loginActionButton("Sign Up", register),
-                      loginActionButton("Log in", login),
-                    ],
-                  ),
-                  Container(height: 20),
-                  Row(
-                    children: <Widget>[
-                      imageTemplate("fullres/login_cat_left.jpeg", true),
-                      imageTemplate("fullres/login_cat_center.jpeg", true),
-                      imageTemplate("fullres/login_cat_right.jpeg", true)
-                    ],
-                  ),
-                  imageTemplate("fullres/login_cat_filler.jpeg", false)
-                ],
-              ))),
+        children: <Widget>[
+          inputField("Email (Username)", emailCtrl, false),
+          inputField("Password", pwdCtrl, true),
+          Container(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              loginActionButton("Forgot Password?", forgotPassword),
+              loginActionButton("Sign Up", register),
+              loginActionButton("Log in", login),
+            ],
+          ),
+          Container(height: 20),
+          Row(
+            children: <Widget>[
+              imageTemplate("assets/fullres/login_cat_left.jpeg", true),
+              imageTemplate("assets/fullres/login_cat_center.jpeg", true),
+              imageTemplate("assets/fullres/login_cat_right.jpeg", true)
+            ],
+          ),
+          imageTemplate("assets/fullres/login_cat_filler.jpeg", false)
+        ],
+      ))),
     );
   }
 }

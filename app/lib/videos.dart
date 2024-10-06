@@ -30,15 +30,12 @@ class _VideosState extends State<Videos> {
 
   // Customized AppBar
   PreferredSizeWidget get topBar {
-    return AppBar(backgroundColor: Colors.deepPurple,
-      elevation: 4,
-      title: Center(
-          child: const Text("(Hopefully) Cat Videos!!!",
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.white
-              )))
-    );
+    return AppBar(
+        backgroundColor: Colors.deepPurple,
+        elevation: 4,
+        title: Center(
+            child: const Text("(Hopefully) Cat Videos!!!",
+                style: TextStyle(fontSize: 24, color: Colors.white))));
   }
 
   // Scaffold that is used when no videos are present in videos list
@@ -47,32 +44,51 @@ class _VideosState extends State<Videos> {
         appBar: topBar,
         body: Center(
             child: Text(
-              "No recent cat recordings — stay tuned!",
-              style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 30
-              ),
-              textAlign: TextAlign.center,
-            )));
+          "No recent cat recordings — stay tuned!",
+          style: TextStyle(color: Colors.blue, fontSize: 30),
+          textAlign: TextAlign.center,
+        )));
   }
 
   // Scaffold that is used when >= 1 videos are present in videos list,
   // Redirects user to corresponding video when video name tapped/pressed
+  // Widget get videoListScaffold {
+  //   return Scaffold(
+  //       appBar: topBar,
+  //       body: ListView.separated(
+  //           separatorBuilder: (context, index) => const Divider(),
+  //           itemCount: videoNamesList.length,
+  //           itemBuilder: (context, index) {
+  //             return ElevatedButton(
+  //                 child: Text(videoNamesList[index].toString()),
+  //                 onPressed: () => Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(
+  //                         builder: (context) =>
+  //                             Video(name: videoNamesList[index]))));
+  //           }));
+  // }
+
   Widget get videoListScaffold {
     return Scaffold(
         appBar: topBar,
-        body: ListView.separated(
-            separatorBuilder: (context, index) => const Divider(),
-            itemCount: videoNamesList.length,
-            itemBuilder: (context, index) {
-              return ElevatedButton(
-                  child: Text(videoNamesList[index].toString()),
-                  onPressed: () => Navigator.push(
+        body: RefreshIndicator(
+            onRefresh: getResults, // Trigger the getResults method
+            child: ListView.separated(
+                separatorBuilder: (context, index) => const Divider(),
+                itemCount: videoNamesList.length,
+                itemBuilder: (context, index) {
+                  return ElevatedButton(
+                    child: Text(videoNamesList[index].toString()),
+                    onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              Video(name: videoNamesList[index]))));
-            }));
+                        builder: (context) =>
+                            Video(name: videoNamesList[index]),
+                      ),
+                    ),
+                  );
+                })));
   }
 
   // Buffers then retrieves correct Scaffold depending on number of videos
