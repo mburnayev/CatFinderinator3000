@@ -12,6 +12,6 @@ This will be a mobile app that a user (me) can use to access the database of cat
 - [X] hook Firebase Authenticate API up to login page
 - [X] figure out which Firebase services to use to retrieve videos from Firestore/RTDB
 - [X] use said services to retrieve videos and display them to app home page
-- [ ] add page pull/refresh functionality to videos page without sending user back to login
+- [X] add page pull/refresh functionality to videos page without sending user back to login
 - [ ] make videos page nicer?
-- [ ] rebuild for Android to verify app icon changed
+- [X] rebuild for Android to verify app icon changed

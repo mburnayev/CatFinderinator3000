@@ -1,5 +1,6 @@
 // --- Dart/Flutter libraries ---
 import 'package:flutter/material.dart';
+import 'dart:ui';
 
 // --- Miscellaneous Libraries
 import 'package:firebase_storage/firebase_storage.dart';
@@ -28,6 +29,12 @@ class _VideosState extends State<Videos> {
     });
   }
 
+  Future<void> refreshHelper() async {
+    setState(() {
+      videoNamesList = [];
+    });
+  }
+
   // Customized AppBar
   PreferredSizeWidget get topBar {
     return AppBar(
@@ -40,77 +47,77 @@ class _VideosState extends State<Videos> {
 
   // Scaffold that is used when no videos are present in videos list
   Widget get noVideosScaffold {
-    return Scaffold(
-        appBar: topBar,
-        body: Center(
-            child: Text(
-          "No recent cat recordings — stay tuned!",
-          style: TextStyle(color: Colors.blue, fontSize: 30),
-          textAlign: TextAlign.center,
-        )));
+    return ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(
+          physics: const BouncingScrollPhysics(),
+          dragDevices: {
+            PointerDeviceKind.touch,
+            PointerDeviceKind.mouse,
+            PointerDeviceKind.trackpad
+          },
+        ),
+        child: RefreshIndicator(
+            onRefresh: refreshHelper,
+            child: Scaffold(
+                appBar: topBar,
+                body: ListView(
+                    children: [
+                      Center(
+                        heightFactor: 15,
+                    child: Text(
+                  "No recent cat detections — stay tuned!",
+                  style: TextStyle(color: Colors.blue, fontSize: 30),
+                  textAlign: TextAlign.center,
+                ))]))));
   }
 
-  // Scaffold that is used when >= 1 videos are present in videos list,
-  // Redirects user to corresponding video when video name tapped/pressed
-  // Widget get videoListScaffold {
-  //   return Scaffold(
-  //       appBar: topBar,
-  //       body: ListView.separated(
-  //           separatorBuilder: (context, index) => const Divider(),
-  //           itemCount: videoNamesList.length,
-  //           itemBuilder: (context, index) {
-  //             return ElevatedButton(
-  //                 child: Text(videoNamesList[index].toString()),
-  //                 onPressed: () => Navigator.push(
-  //                     context,
-  //                     MaterialPageRoute(
-  //                         builder: (context) =>
-  //                             Video(name: videoNamesList[index]))));
-  //           }));
-  // }
-
+  // Scaffold for 1+ videos in videos list, redirects user to video on press
   Widget get videoListScaffold {
     return Scaffold(
         appBar: topBar,
-        body: RefreshIndicator(
-            onRefresh: getResults, // Trigger the getResults method
-            child: ListView.separated(
-                separatorBuilder: (context, index) => const Divider(),
-                itemCount: videoNamesList.length,
-                itemBuilder: (context, index) {
-                  return ElevatedButton(
-                    child: Text(videoNamesList[index].toString()),
-                    onPressed: () => Navigator.push(
+        body: ListView.separated(
+            separatorBuilder: (context, index) => const Divider(),
+            itemCount: videoNamesList.length,
+            itemBuilder: (context, index) {
+              return ElevatedButton(
+                  child: Text(videoNamesList[index].toString()),
+                  onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            Video(name: videoNamesList[index]),
-                      ),
-                    ),
-                  );
-                })));
+                          builder: (context) =>
+                              Video(name: videoNamesList[index]))));
+            }));
   }
 
   // Buffers then retrieves correct Scaffold depending on number of videos
   Widget get homeApp {
-    return FutureBuilder<void>(
-      future: getResults(),
-      builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // Display a loading indicator while waiting for results
-          return const CircularProgressIndicator();
-        } else if (snapshot.hasError) {
-          // Handle any errors that occur during the asynchronous operation
-          return Text('Error: ${snapshot.error}');
-        } else {
-          Widget finalScaffold = const Scaffold();
-          finalScaffold =
-              (videoNamesList.isEmpty) ? noVideosScaffold : videoListScaffold;
-          // Retrieve the appropriate scaffold widget once the results are available
-          return finalScaffold;
-        }
-      },
-    );
+    return ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(
+          physics: const BouncingScrollPhysics(),
+          dragDevices: {
+            PointerDeviceKind.touch,
+            PointerDeviceKind.mouse,
+            PointerDeviceKind.trackpad
+          },
+        ),
+        child: RefreshIndicator(
+            onRefresh: refreshHelper,
+            child: FutureBuilder<void>(
+              future: getResults(),
+              builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  Widget finalScaffold = const Scaffold();
+                  finalScaffold = (videoNamesList.isEmpty)
+                      ? noVideosScaffold
+                      : videoListScaffold;
+                  return finalScaffold;
+                }
+              },
+            )));
   }
 
   @override
