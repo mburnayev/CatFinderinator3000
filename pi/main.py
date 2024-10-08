@@ -4,80 +4,97 @@ If cat is detected in frame, record a short video of cat, save video to device,
 push video to database, then delete video from device.
 
 Author: Misha Burnayev
-Date: 02/05/2023 (dd/mm/yyyy)
 """
-import cv2, time, os, pyrebase
+import time, os, threading
 
-config = {}
-with open("credentials.txt") as f:
+import pyrebase
+import cv2
+
+pyrebase_config = {}
+with open("creds_firebase.txt") as f:
     for line in f:
         (key, val) = line.split(" ")
         key, val = key.strip(), val.strip()
-        config[key] = val
+        pyrebase_config[key] = val
 
-firebase = pyrebase.initialize_app(config)
+firebase = pyrebase.initialize_app(pyrebase_config)
 storage = firebase.storage()
 
+recording = False
+writer = None
+title = ""
+quit_flag = False
+
+def check_keys():
+    global storage, recording, writer, title, quit_flag
+
+    while True:
+        key = input()  # Blocks until input is given
+        
+        # Record video if user presses 'r' key, will change to record when a detection occurs
+        if key == 'r' and not recording:
+            print("Video now recording...")
+            recording = True
+
+            title = time.strftime("Video_%y.%m.%d_%H.%M.%S.mp4", time.localtime())
+            writer = cv2.VideoWriter(title, cv2.VideoWriter_fourcc(*"avc1"), 30.0, (640, 480))
+
+        # Stop recording video if user presses 's' key, clear VideoWriter
+        elif key == 's' and recording:
+            print("Video recorded!")
+            recording = False
+
+            writer.release()
+            writer = None
+            path_cloud = "videos/" + title
+            storage.child(path_cloud).put(title)
+            time.sleep(1)  # delay to publish video to Firebase (just in case)
+            os.remove(title)
+
+        # Raise flag for main thread, exit loop, close thread
+        elif key == 'q':
+            if recording:
+                print("Cannot quit while recording!")
+            else:
+                quit_flag = True
+                break
+
 def main():
+    print("Script started")
+    global recording, writer, quit_flag
+
     cap = cv2.VideoCapture(0)
-    # mp4 codec that doesn't cause FFMPEG to print warnings and is
-    # compatible with native Chrome Web player and Android ExoPlayer
-    fcc = cv2.VideoWriter_fourcc(*"avc1")
-    fps = 30.0
-    dims = (480, 480)
-    recording = False
-    writer = None
-    title = "failed.mp4"
-    num_det_frames = 0
 
     if not cap.isOpened():
         print("Cannot open camera!")
         return
     
+    # Start a key listener in a separate thread:
+    # This is done so I can test remotely without having to rely on
+    # imshow() and waitKey() using X11 forwarding since it's really slow
+    key_listener_thread = threading.Thread(target = check_keys)
+    key_listener_thread.daemon = True
+    key_listener_thread.start()
+    print("Input daemon launched, waiting for input...")
+
     while True:
-        print("entered loop")
-        # read camera frame
         ret, frame = cap.read()
         if not ret:
             print("Can't retrieve frame, exiting ...")
             break
 
-        # display frame
-        cropped_frame = frame[0:480, 80:560]
-        # cv2.imshow("Camera Feed", cropped_frame)
-        print(cropped_frame)
+        frame = cv2.rotate(frame, cv2.ROTATE_180)
 
-        key = cv2.waitKey(1)
-        # record video if user presses 'r' key
-        if key == ord('r') and not recording:
-            title = time.strftime("Video_%d.%m.%y_%H.%M.%S.mp4", time.localtime())
-            print("Video now recording")
-            writer = cv2.VideoWriter(title, fcc, fps, dims)
-            recording = True
-
-        # add frame to video if recording
-        if recording:
-            writer.write(cropped_frame)
+        if recording and writer is not None:
+            writer.write(frame)
         
-        # stop recording video if user presses 's' key
-        if key == ord('s') and recording:
-            print("Video recorded!")
-            recording = False
-            writer.release()
-            path_cloud = "videos/" + title
-            path_local = title
-            storage.child(path_cloud).put(path_local)
-            time.sleep(1.5)
-            os.remove(title)
-
-        # exit loop and terminate program if user presses 'q' key
-        if key == ord('q'):
+        # Exit main thread
+        if quit_flag:
+            print("Exiting...")
             break
-    
-    # cleanup
+
+    # Cleanup
     cap.release()
-    cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     main()
-
