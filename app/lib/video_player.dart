@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 // --- Miscellaneous Libraries
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class Video extends StatelessWidget {
   final String name;
@@ -42,13 +42,7 @@ class _VideoState extends State<VideoPlayerScreen> {
     chewieController = ChewieController(
         videoPlayerController: videoPlayerController,
         autoPlay: true,
-        looping: false,
-        additionalOptions: (context) {
-          return <OptionItem>[
-            OptionItem(onTap: () => {}, iconData: Icons.arrow_downward, title: "Download video")
-          ];
-        }
-    );
+        looping: false);
     playerWidget = Chewie(controller: chewieController);
   }
 
@@ -59,7 +53,7 @@ class _VideoState extends State<VideoPlayerScreen> {
         elevation: 4,
         title: Center(
             child:
-            Text(widget.videoName, style: TextStyle(color: Colors.white))));
+                Text(widget.videoName, style: TextStyle(color: Colors.white))));
   }
 
   @override
