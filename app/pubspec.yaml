@@ -43,6 +43,7 @@ dependencies:
   video_player: ^2.6.1
   url_launcher: ^6.3.0
   flutter_launcher_icons: ^0.14.1
+  chewie: ^1.8.5
 
 dev_dependencies:
   flutter_test:

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 // --- Miscellaneous Libraries
 import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class Video extends StatelessWidget {
@@ -28,32 +29,27 @@ class VideoPlayerScreen extends StatefulWidget {
 
 class _VideoState extends State<VideoPlayerScreen> {
   final storageRef = FirebaseStorage.instance.ref().child("videos");
-  String videoURLName = "";
-  late VideoPlayerController _controller;
-  late Future<void> _initVPFuture;
+  late VideoPlayerController videoPlayerController;
+  late ChewieController chewieController;
+  late Chewie playerWidget;
 
   // Initialize video controllers while asynchronously fetching video
-  @override
-  void initState() {
-    super.initState();
-    getVideo();
-    _controller = VideoPlayerController.networkUrl(Uri.parse(videoURLName));
-    _initVPFuture = _controller.initialize();
-  }
-
-  // Retrieve video and have controllers update to display video
-  Future<void> getVideo() async {
+  Future<void> init() async {
+    final storageRef = FirebaseStorage.instance.ref().child("videos");
     final videoURL = await storageRef.child(widget.videoName).getDownloadURL();
-    videoURLName = videoURL;
-    _controller = VideoPlayerController.networkUrl(Uri.parse(videoURLName));
-    _initVPFuture = _controller.initialize();
-    _controller.setLooping(true);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    videoPlayerController =
+        VideoPlayerController.networkUrl(Uri.parse(videoURL));
+    chewieController = ChewieController(
+        videoPlayerController: videoPlayerController,
+        autoPlay: true,
+        looping: false,
+        additionalOptions: (context) {
+          return <OptionItem>[
+            OptionItem(onTap: () => {}, iconData: Icons.arrow_downward, title: "Download video")
+          ];
+        }
+    );
+    playerWidget = Chewie(controller: chewieController);
   }
 
   // Customized AppBar
@@ -62,45 +58,31 @@ class _VideoState extends State<VideoPlayerScreen> {
         backgroundColor: Colors.deepPurple,
         elevation: 4,
         title: Center(
-            child: Text(widget.videoName,
-                style: TextStyle(fontSize: 24, color: Colors.white))));
+            child:
+            Text(widget.videoName, style: TextStyle(color: Colors.white))));
   }
 
-  // Adds watchable video, play and pause options, buttons to go back to Home
-  Widget get singleVideo {
-    return Scaffold(
-      // The AppBar widget apparently comes with a back button?
-      appBar: topBar,
-      body: FutureBuilder(
-          future: _initVPFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  child: VideoPlayer(_controller));
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          }),
-      floatingActionButton: playPauseButton,
-    );
-  }
-
-  Widget get playPauseButton {
-    return FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _controller.value.isPlaying
-                ? _controller.pause()
-                : _controller.play();
-          });
-        },
-        child:
-            Icon(_controller.value.isPlaying ? Icons.pause : Icons.play_arrow));
+  @override
+  void dispose() {
+    videoPlayerController.dispose();
+    chewieController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return singleVideo;
+    return Scaffold(
+        appBar: topBar,
+        body: FutureBuilder(
+            future: init(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                return playerWidget;
+              }
+            }));
   }
 }

@@ -15,3 +15,4 @@ This will be a mobile app that a user (me) can use to access the database of cat
 - [X] add page pull/refresh functionality to videos page without sending user back to login
 - [ ] make videos page nicer?
 - [X] rebuild for Android to verify app icon changed
+- [ ] add option to download video
