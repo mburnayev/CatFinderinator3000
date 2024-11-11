@@ -46,10 +46,10 @@ Train and Validate a TFLite model | The model wasn't very good and had 100% accu
 Install OpenCV and Tensorflow for Python 3.7 on the RPi 3 (2023) | Dependency hell is real and there is no greater test of patience than that, but I won after I think a month | ✅
 Deploy the model and perform inferencing | Crummy model produced crummy results. Also it ran at low single digit fps (<3 fps) and detected nothing. Buying a Coral Edge TPU could improve performance, but that was an extra expense I didn't think was worth the investment | 🆗
 Put everything together (2023) | Bad model, poor performance, didn't implement recording functionality and dropped project | ❎
-\- | **Hiatus** | -
+\---------- | **Hiatus** | ----------
 Start project back up | I cannot run main.py and OpenCV is generating a slew of errors | ❎
 Install different Python versions to fix OpenCV | Some Python builds broke altogether and others failed to install OpenCV | ❎
-\- | **Hiatus** | -
+\---------- | **Hiatus** | ----------
 Start project back up again | Still can't run main.py and OpenCV continues to malfunction | 🆗
 Install different Python versions to fix OpenCV | Success! Kind of. Python 3.9.2 and opencv-python==4.5.5.64 work, but now Numpy is having issues | 🆗
 Install different Python versions to fix Numpy | Success! Now I can't install OpenCV! | 🆗
@@ -63,10 +63,19 @@ Set up X11 forwarding for remote viewing of OpenCV video feed | holy crap I can'
 Adjust X11 forwarding to update feed faster and not tamper with FPS | not necessary in retrospect, this was just for debugging | ❎
 Add motion detection algorithm | - | ✅
 Add automated recording | Needs fine tuning | ✅
-Apply final touches to app | QoL stuff -> sort by newest, banner indicating new vid, etc. | -
-Deploy app to Web via S3 | in progress | -
-Apply final touches to detection algorithm | in progress, need to adjust sensitivity of motion detector | -
-Wrap up this README and the project as a whole | in progress | -
+~~Apply final touches to app~~ | ~~QoL stuff -> sort by newest, banner indicating new vid, etc.~~ | ❎
+~~Deploy app to Web via S3~~ | ~~in progress~~ | ❎
+Apply final touches to detection algorithm | in progress, need to adjust sensitivity of motion detector | ✅
+Wrap up this project as a whole | First complete project version published! | ✅
+\---------- | **Future Work** | ----------
+Find a ML framework that promises good results | in progress | -
+Implement ML framework mentioned above | in progress | -
+Test ML implementation | - | -
+Add caching to Flutter app | in progress, current method of fetching videos list and videos themselves is very bandwidth heavy | - 
+Improve app UI | - | -
+Do e2e test with updated app and new detector | - | -
+Create new release | - | -
+Deploy static app to S3 bucket | - | -
 
 ## Future Work, if Revisited
 <table>
