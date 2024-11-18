@@ -1,3 +1,6 @@
-credentials.txt
-__pycache__
-test_data
+# VSCode
+.DS_Store
+
+# Credentials
+creds_firebase.txt
+static_ip.txt

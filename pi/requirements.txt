@@ -1,2 +1,4 @@
 pyrebase4
 opencv-python-headless
+torch
+torchvision
