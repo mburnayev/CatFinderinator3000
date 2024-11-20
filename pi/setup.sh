@@ -82,6 +82,7 @@ if [ $1 -eq 3 ] || [ $1 = "all" ]
         echo "---------- Setting up Python Virtual Environment... ----------"
         cd /home/pi/Downloads/project
         python -m venv ppvenv
+        # TODO: add command that sets `include-system-site-packages = true` in <venv>/pyvenv.cfg
         source ppvenv/bin/activate
         python -m pip install --upgrade pip
         pip install -r requirements.txt
@@ -89,4 +90,4 @@ if [ $1 -eq 3 ] || [ $1 = "all" ]
         echo "---------- Stage 3 Setup Complete ----------"
 fi
 
-# script can then be running using `python3 main.py`
+# script can then be run using `python3 main.py`
