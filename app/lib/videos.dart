@@ -17,14 +17,13 @@ class Videos extends StatefulWidget {
 
 class _VideosState extends State<Videos> {
   final storageRef = FirebaseStorage.instance.ref().child("videos");
-
   List<String> videoNamesList = [];
 
   // Retrieves video names from Firebase Cloud Storage bucket
   Future<void> getResults() {
     return storageRef.listAll().then((listResult) {
       for (var item in listResult.items) {
-        videoNamesList.add(item.name);
+        videoNamesList.insert(0, item.name);
       }
     });
   }
@@ -41,7 +40,7 @@ class _VideosState extends State<Videos> {
         backgroundColor: Colors.deepPurple,
         elevation: 4,
         title: Center(
-            child: const Text("(Hopefully) Cat Videos!!!",
+            child: const Text("Cat Videos!",
                 style: TextStyle(fontSize: 24, color: Colors.white))));
   }
 
@@ -60,15 +59,15 @@ class _VideosState extends State<Videos> {
             onRefresh: refreshHelper,
             child: Scaffold(
                 appBar: topBar,
-                body: ListView(
-                    children: [
-                      Center(
-                        heightFactor: 15,
-                    child: Text(
-                  "No recent cat detections — stay tuned!",
-                  style: TextStyle(color: Colors.blue, fontSize: 30),
-                  textAlign: TextAlign.center,
-                ))]))));
+                body: ListView(children: [
+                  Center(
+                      heightFactor: 15,
+                      child: Text(
+                        "No recent cat detections — stay tuned!",
+                        style: TextStyle(color: Colors.blue, fontSize: 30),
+                        textAlign: TextAlign.center,
+                      ))
+                ]))));
   }
 
   // Scaffold for 1+ videos in videos list, redirects user to video on press

@@ -31,7 +31,8 @@ import time, os, threading
 import pyrebase
 import cv2
 
-print("Configuring PyTorch model parameters...")
+print("Configuring PyTorch and model parameters...")
+
 import torch
 from torchvision import models, transforms
 
@@ -40,10 +41,10 @@ preprocess = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize(mean = [0.485, 0.456, 0.406], std = [0.229, 0.224, 0.225]),
 ])
-net = models.quantization.mobilenet_v2(pretrained = True, quantize = True)
-
+net = models.quantization.mobilenet_v2(weights = "IMAGENET1K_QNNPACK_V1", quantize = True)
 net = torch.jit.script(net)
-print("PyTorch configuration done!")
+
+print("PyTorch and model configuration complete!")
 
 # Initialize Firebase Cloud Storage connection
 pyrebase_config = {}
@@ -62,7 +63,7 @@ title = ""
 manual_mode = False
 quit_flag = False
 
-def increase_brightness(img, value = 30):
+def increase_brightness(img, value):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     h, s, v = cv2.split(hsv)
 
@@ -125,7 +126,7 @@ def main():
     key_listener_thread.start()
     print("Input daemon launched, waiting for input...")
 
-    # Initialize motion detection variables
+    # Initialize recording variables
     frames_written = 0
     empty_frames = 0
     num_recordings = 0
@@ -163,7 +164,7 @@ def main():
                         cat_found = True
                         # print("CAT FOUND!!!")
 
-                # Manual recording precedes automatic recording in priority
+                # Manual recording trumps automatic recording in priority
                 if manual_mode:
                     if recording and writer is not None:
                         writer.write(frame)
@@ -184,7 +185,7 @@ def main():
                         
                     else:
                         if empty_frames >= 500:
-                            # State: () -> () — Stop recording if no detections for a while and recording was True
+                            # State: () -> () — Stop recording if no detections in a while and recording was True
                             if recording:
                                 writer.release()
                                 writer = None
@@ -198,7 +199,7 @@ def main():
                                     num_recordings += 1
                                     print("Video pushed to Firebase!")
 
-                                # os.remove(title).
+                                # os.remove(title)
                                 frames_written = 0
                                 empty_frames = 0
                                 recording = False
