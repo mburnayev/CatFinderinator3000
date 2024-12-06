@@ -35,16 +35,15 @@ That being said, I included artifacts of my attempts to use the Tensorflow frame
 Task | Notes | Resolved?
 --- | --- | ---
 Create a foundation for an app that can display videos | - | ✅
-Preliminary app testing on Web | - | ✅
-Preliminary app testing on Android (2023) | Spent a lot of time amending Gradle and Kotlin files to use correct SDK versions and dependencies | ✅
+Preliminary app testing | Spent a lot of time amending Gradle and Kotlin files to use correct SDK versions and dependencies | ✅
 Preliminary app testing on iOS | Spent almost two weeks working with CocoaPods, deployed it on an iPad, then something broke. No more iOS, too much headache| ❎
-Set up Firebase Authentication and Cloud Storage and configuring app to use it | Piece of cake, thanks Google | ✅
+Set up Firebase Authentication and Cloud Storage and configuring app to use it | - | ✅
 Find instructions on how to create a custom Tensorflow(lite) model | - | ✅ 
 Find an instructive Google Colab on custom model training | Google created many TFLite Google Colabs back around 2020, sadly none of them worked in the cloud | ❎
 Install the tflite-model-maker package | Couldn't install it because it needed ScaNN, which is only for x86 processors, found a workaround using Kali Linux using [UTM](https://mac.getutm.app/) | ✅
 Train and Validate a TFLite model | The model wasn't very good and had 100% accuracy, see pictures above | 🆗
 Install OpenCV and Tensorflow for Python 3.7 on the RPi 3 (2023) | Dependency hell is real and there is no greater test of patience than that, but I won after I think a month | ✅
-Deploy the model and perform inferencing | Crummy model produced crummy results. Also it ran at low single digit fps (<3 fps) and detected nothing. Buying a Coral Edge TPU could improve performance, but that was an extra expense I didn't think was worth the investment | 🆗
+Deploy the model and perform inferencing | Crummy model produced crummy results. Also it ran at low single digit fps (\<3 fps) and detected nothing. Buying a Coral Edge TPU could improve performance, but that was an extra expense I didn't think was worth the investment | 🆗
 Put everything together (2023) | Bad model, poor performance, didn't implement recording functionality and dropped project | ❎
 \---------- | **Hiatus** | ----------
 Start project back up | I cannot run main.py and OpenCV is generating a slew of errors | ❎
@@ -54,49 +53,58 @@ Start project back up again | Still can't run main.py and OpenCV continues to ma
 Install different Python versions to fix OpenCV | Success! Kind of. Python 3.9.2 and opencv-python==4.5.5.64 work, but now Numpy is having issues | 🆗
 Install different Python versions to fix Numpy | Success! Now I can't install OpenCV! | 🆗
 3D print a stand for the camera and a fan | Thank you Skibidi Labib <3 | ✅
-Look into PyTorch for object detection | - | ✅
-Install PyTorch | pip can't find PyTorch | ❎
+Look into and install PyTorch for object detection | Pip can't find PyTorch | ❎
 Abandon Tensorflow and Pytorch | Both ML libraries are built for 64-bit systems and mine is a 32-bit system, and they run like crud anyways | ✅
 Install OpenCV again | Flashed a new 64-bit Raspbian image onto the Pi and installed OpenCV for Python 3.9.2 | ✅
 Set static IP address for RPi | - | ✅
-Set up X11 forwarding for remote viewing of OpenCV video feed | holy crap I can't believe this worked, I almost opened a new can of worms looking at qt.qpa plugins for solutions... thank God this works |  ✅
-Adjust X11 forwarding to update feed faster and not tamper with FPS | not necessary in retrospect, this was just for debugging | ❎
+Set up X11 forwarding for remote viewing of OpenCV video feed | Holy crap I can't believe this worked, I almost opened a new can of worms looking at qt.qpa plugins for solutions... thank God this works |  ✅
+Adjust X11 forwarding to update feed faster and not tamper with FPS | Not necessary in retrospect, this was just for debugging | ❎
 Add motion detection algorithm | - | ✅
 Add automated recording | Needs fine tuning | ✅
 ~~Apply final touches to app~~ | ~~QoL stuff -> sort by newest, banner indicating new vid, etc.~~ | ❎
 ~~Deploy app to Web via S3~~ | ~~in progress~~ | ❎
-Apply final touches to detection algorithm | in progress, need to adjust sensitivity of motion detector | ✅
-Wrap up this project as a whole | First complete project version published! | ✅
-\---------- | **Future Work** | ----------
-Find a ML framework that promises good results | in progress | -
-Implement ML framework mentioned above | in progress | -
-Test ML implementation | - | -
-Add caching to Flutter app | in progress, current method of fetching videos list and videos themselves is very bandwidth heavy | - 
-Improve app UI | - | -
-Do e2e test with updated app and new detector | - | -
+Adjust motion detection algorithm sensitivity | Too many issues, loses core purpose of detecting my cat | ❎
+Wrap up this project | First complete project version published! | ✅
+\---------- | **V1 PUBLISHED** | ----------
+Find and implement a ML framework that promises good results | Welcome back PyTorch | ✅
+Test ML implementation | Success! I got reliable detections with a pre-built MobileNetV2 model| ✅
+Add caching to Flutter app | Mobile caching works (pretty sure), web caching *maybe* works | ✅
+Apply final touches to app UI | in progress | -
+Refactor recording frequency | in progress | -
+Run some e2e tests | - | -
 Create new release | - | -
-Deploy static app to S3 bucket | - | -
+Deploy web app to Firebase  | - | -
+Wrap up this project | - | -
+\---------- | **V2 PUBLISHED** | ----------
 
 ## Future Work, if Revisited
 <table>
 <tr>
 <th align="center">
-<img width="441" height="1">
+<img width="200" height="1">
 <p><small>Task</small></p>
 </th>
 <th align="center">
-<img width="441" height="1">
+<img width="200" height="1">
 <p><small>Priority, if chosen</small></p>
+</th>
+<th align="center">
+<img width="200" height="1">
+<p><small>Done?</small></p>
 </th>
 </tr>
 
 <tr>
 <td align="left">
-Revisit ML frameworks, see if I can create a better performing model using cloud services (Hugging Face, AWS SageMaker, etc.) since building locally was incredibly unviable<br></br>
+<s>Revisit ML frameworks, see if I can create a better performing model using cloud services (Hugging Face, AWS SageMaker, etc.) since building locally was incredibly unviable<br></br>
 Would require retaking and relabeling photos of my cat using the USB camera attached to the RPi since the images used for training and testing are too high quality compared to the RPi's camera
 </td>
 <td align="center">
 High
+</td>
+</td>
+<td align="center">
+✅
 </td>
 </tr>
 
@@ -107,13 +115,20 @@ Deploy the app to the Google Play Store
 <td align="center">
 Medium
 </td>
+<td align="center">
+❎
+</td>
 </tr>
+
 
 <tr>
 <td align="left">
 Revisit app, see if I can get it to run on iOS</td>
 <td align="center">
 Low
+</td>
+<td align="center">
+❎
 </td>
 </tr>
 
