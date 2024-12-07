@@ -1,3 +1,4 @@
+# README
 ## Configuring the RPi
 run `setup.sh` with sudo and everything should get nicely configured
 `setup.sh` features three stages:
