@@ -31,9 +31,9 @@ I originally wanted this project to use a machine learning model to detect my ca
 That being said, artifacts of my attempts to use Tensorflow can be found in previous commits, and these are my model training results:
 <img width="954" alt="1" src="https://github.com/user-attachments/assets/8ce13087-bc4b-4970-83b2-5f3f7a16e139">
 
-After failing to build my own working Tensorflow object detection model, I opted for a motion detection-based approach as a simpler means of finding my cat and to put a lid on this project. However, after implementing it, I found that the results were underwhelming and not nearly as good as I expected:
+After failing to build my own working Tensorflow object detection model, I opted for a motion detection-based approach as a simpler means of finding my cat and to put a lid on this project. However, after implementing it, I found that the results were underwhelming and not nearly as good as I expected (notice the flickering contour which is supposed to bound the moving object):
 
-[video]
+https://github.com/user-attachments/assets/c7f2efde-9d9a-4e35-a83d-711c75bf03d6
 
 Seeing that I could do a better job, I decided to explore other ML frameworks, and after some initial testing, found that PyTorch was pretty powerful and effective — the rest is history.
 
