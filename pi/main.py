@@ -54,9 +54,16 @@ with open("creds_firebase.txt") as f:
         key, val = key.strip(), val.strip()
         pyrebase_config[key] = val
 
-# firebase = pyrebase.initialize_app(pyrebase_config)
-# storage = firebase.storage()
+firebase = pyrebase.initialize_app(pyrebase_config)
+storage = firebase.storage()
 
+# Register credentials with Firebase Authentication
+auth = firebase.auth()
+auth_creds = open("creds_me.txt")
+email, password = auth_creds.readline().split(" ")
+user = auth.sign_in_with_email_and_password(email, password)
+
+# Recording variables
 recording = False
 writer = None
 title = ""
@@ -76,14 +83,14 @@ def increase_brightness(img, value):
     return img
 
 def check_keys():
-    global storage, recording, writer, title, manual_mode, quit_flag
+    global user, storage, recording, writer, title, manual_mode, quit_flag
 
     while True:
         key = input()
 
         # Record video if user presses 'r' key, will change to record when a detection occurs
         if key == 'r' and not recording:
-            print("Video now recording...")
+            print("Manual video now recording...")
             manual_mode = True
             recording = True
 
@@ -92,15 +99,20 @@ def check_keys():
 
         # Stop recording video if user presses 's' key, clear VideoWriter
         elif key == 's' and recording:
-            print("Video recorded!")
+            print("Recording manually stopped!")
             recording = False
 
             writer.release()
             writer = None
             path_cloud = "videos/" + title
-            # storage.child(path_cloud).put(title)
+            try:
+                user = auth.refresh(user['refreshToken'])
+                storage.child(path_cloud).put(title, user['idToken'])
+            except Exception as e:
+                print("Video probably too small... or you aren't authenticated!")
+                print(e)
             time.sleep(1)  # delay to publish video to Firebase (just in case)
-            # os.remove(title)
+            os.remove(title)
             manual_mode = False
 
         # Raise flag for main thread, exit loop, close thread
@@ -112,7 +124,7 @@ def check_keys():
                 break
 
 def main():
-    global recording, writer, title, manual_mode, quit_flag
+    global user, recording, writer, title, manual_mode, quit_flag
 
     cap = cv2.VideoCapture(0)
 
@@ -139,7 +151,11 @@ def main():
             if time_struct.tm_hour == 0 and time_struct.tm_min == 0:
                 num_recordings = 0
             
-            if num_recordings < 100:
+            # I also need to keep refreshing my user token to keep making authenticated pushes
+            if time_struct.tm_min == 30 and (time_struct.tm_sec > 0 and time_struct.tm_sec < 15):
+                user = auth.refresh(user['refreshToken'])
+            
+            if num_recordings < 5:
                 ret, frame = cap.read()
                 if not ret:
                     print("Can't retrieve frame, exiting ...")
@@ -159,10 +175,8 @@ def main():
 
                 cat_found = False
                 for idx, val in top[:10]:
-                    # print(f"{val.item()*100:.2f}% {idx}")
                     if idx > 280 and idx < 288:
                         cat_found = True
-                        # print("CAT FOUND!!!")
 
                 # Manual recording trumps automatic recording in priority
                 if manual_mode:
@@ -172,34 +186,60 @@ def main():
                     if cat_found:
                         # State: () -> (...) — Start recording if cat spotted and not actively recording
                         if not recording:
-                            print("Video now recording...")
+                            print("Automatic video now recording...")
                             recording = True
 
                             title = time.strftime("Video_%y.%m.%d_%H.%M.%S.mp4", time.localtime())
                             writer = cv2.VideoWriter(title, cv2.VideoWriter_fourcc(*"avc1"), 10.0, (640, 480))
                         
                         # State: (...) -> (...) — At this point recording has to be True, so we are safe to record frames
-                        if frames_written < 1001 and writer is not None:
-                            frames_written += 1
-                            writer.write(frame)
-                        
+                        if frames_written < 1501:
+                            if writer is not None:
+                                frames_written += 1
+                                writer.write(frame)
+
+                        # State: (...) -> (...) — Immediately stop recording if we've hit the recording limit
+                        else:
+                            if recording:
+                                writer.release()
+                                writer = None
+                                print("Automatic video recorded!")
+
+                                # Only push longer recordings, filter out 'blip' videos
+                                if os.path.getsize(title) > 100000:
+                                    path_cloud = "videos/" + title
+                                    storage.child(path_cloud).put(title, user['idToken'])
+                                    time.sleep(1)
+                                    num_recordings += 1
+                                    if num_recordings == 5:
+                                        print("Maximum number of recordings for one day met!")
+                                    print("Video pushed to Firebase!")
+
+                                os.remove(title)
+                                frames_written = 0
+                                empty_frames = 0
+                                recording = False
                     else:
-                        if empty_frames >= 500:
+                        if empty_frames >= 200:
                             # State: () -> () — Stop recording if no detections in a while and recording was True
                             if recording:
                                 writer.release()
                                 writer = None
-                                print("Video recorded!")
+                                print("Automatic video recorded!")
 
                                 # Only push longer recordings, filter out 'blip' videos
-                                if os.path.getsize(title) > 1000:
+                                if os.path.getsize(title) > 300000:
                                     path_cloud = "videos/" + title
-                                    # storage.child(path_cloud).put(title)
+                                    storage.child(path_cloud).put(title, user['idToken'])
                                     time.sleep(1)
                                     num_recordings += 1
+                                    if num_recordings == 5:
+                                        print("Maximum number of recordings for one day met!")
                                     print("Video pushed to Firebase!")
+                                else:
+                                    print("Video too small, no push!");
 
-                                # os.remove(title)
+                                os.remove(title)
                                 frames_written = 0
                                 empty_frames = 0
                                 recording = False
