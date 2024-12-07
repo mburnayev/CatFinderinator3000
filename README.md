@@ -1,4 +1,4 @@
-# CatFinderinator3000
+# [CatFinderinator3000](https://catfinderinator3000.web.app/)
 Fun(?) little multifaceted project that uses a variety of technologies I've touched down on in the past and/or wanted to use.
 
 ## Project overview
@@ -30,6 +30,12 @@ Here is an abstracted visualization of the project that the above text describes
 I originally wanted this project to use a machine learning model to detect my cat specifically, and I nearly succeeded, but there were too many drawbacks to continue using TFLite models for the reasons listed in the timeline and obstacles breakdown<br><br>
 That being said, artifacts of my attempts to use Tensorflow can be found in previous commits, and these are my model training results:
 <img width="954" alt="1" src="https://github.com/user-attachments/assets/8ce13087-bc4b-4970-83b2-5f3f7a16e139">
+
+After failing to build my own working Tensorflow object detection model, I opted for a motion detection-based approach as a simpler means of finding my cat and to put a lid on this project. However, after implementing it, I found that the results were underwhelming and not nearly as good as I expected:
+
+[video]
+
+Seeing that I could do a better job, I decided to explore other ML frameworks, and after some initial testing, found that PyTorch was pretty powerful and effective — the rest is history.
 
 ## Project Timeline and Obstacles Breakdown
 Task | Notes | Resolved?
@@ -72,8 +78,8 @@ Add caching to Flutter app | Mobile caching works (pretty sure), web caching *ma
 Improve cloud storage rules | - | ✅
 Add additional bucket rules through Google Cloud Console | - | ✅
 Refactor recording frequency | - | ✅
+Deploy web app to Firebase  | accessible at [catfinderinator3000.web.app](https://catfinderinator3000.web.app) | ✅
 Run some e2e tests | in progress | -
-Deploy web app to Firebase  | in progress | -
 Create new release | - | -
 Wrap up this project | - | -
 \---------- | **V2 PUBLISHED** | ----------
