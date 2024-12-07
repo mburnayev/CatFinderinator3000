@@ -3,33 +3,32 @@ Fun(?) little multifaceted project that uses a variety of technologies I've touc
 
 ## Project overview
 This system is comprised of 3 main components:
-- Raspberry Pi 4 (with camera)
+- Raspberry Pi 4 (with camera and an image classifier)
 - Firebase (for app authentication and database)
 - Cross-platform application (written in Dart, using Flutter)
 
 The systems starts with the RPi, which is designed to detect my cat, which has a perpetually running Python script that will record a short video if my cat is detected in the live feed. Having recording the video, the script will push the recorded video to a database, which can then be accessed on any platform through an app I created that retrieves the recorded videos from the database.
 
-Here is an abstracted visualization of the project that the above text describes. This needs to be updated...
-
-<img width="563" alt="Screenshot 2023-05-10 at 12 43 26 PM (2)" src="https://github.com/Mooobert/CatFinderinator3000/assets/82725378/e32655af-2f40-4ecb-b26d-d1ba49db03fc">
+Here is an abstracted visualization of the project that the above text describes:
+<img width="890" alt="diagram" src="https://github.com/user-attachments/assets/86f6d9e6-2e3a-487e-a40c-8943f0ade212">
 
 ## Note
-I originally wanted this project to use a machine learning model to detect my cat specifically, and I nearly succeeded, but there were too many drawbacks to continue using TFLite models for the reasons listed in the timeline and obstacles breakdown
-That being said, I included artifacts of my attempts to use the Tensorflow framework:
+I originally wanted this project to use a machine learning model to detect my cat specifically, and I nearly succeeded, but there were too many drawbacks to continue using TFLite models for the reasons listed in the timeline and obstacles breakdown<br><br>
+That being said, artifacts of my attempts to use the Tensorflow framework can be found in previous commits, and these are my model training results:
 [content here]
 
 ## Technologies used
 - Python
-- Dart + Flutter
-- labelImg + Kaggle
+- PyTorch
 - OpenCV
-- Tensorflow + TFLite
-- Tensorflow Custom Model Trainer 
+- Dart + Flutter
 - Firebase Authentication
 - Firebase Cloud Storage
+- labelImg + Kaggle
+- Tensorflow + TFLite
+- Tensorflow Custom Model Trainer 
 - UTM
 - Linux (Raspian, Kali Linux)
-- AWS S3
 
 ## Project Timeline and Obstacles Breakdown
 Task | Notes | Resolved?
