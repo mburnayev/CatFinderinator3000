@@ -68,9 +68,9 @@ Wrap up this project | First complete project version published! | ✅
 Find and implement a ML framework that promises good results | Welcome back PyTorch | ✅
 Test ML implementation | Success! I got reliable detections with a pre-built MobileNetV2 model| ✅
 Add caching to Flutter app | Mobile caching works (pretty sure), web caching *maybe* works | ✅
-Apply final touches to app UI | in progress | -
+Improve and add cloud storage rules | - | ✅
 Refactor recording frequency | in progress | -
-Run some e2e tests | - | -
+Run some e2e tests | in progress | -
 Create new release | - | -
 Deploy web app to Firebase  | - | -
 Wrap up this project | - | -
