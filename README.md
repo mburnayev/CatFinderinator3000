@@ -4,18 +4,13 @@ Fun(?) little multifaceted project that uses a variety of technologies I've touc
 ## Project overview
 This system is comprised of 3 main components:
 - Raspberry Pi 4 (with camera and an image classifier)
-- Firebase (for app authentication and database)
+- Firebase (for app and data authentication, data storage, and webapp deployment)
 - Cross-platform application (written in Dart, using Flutter)
 
 The systems starts with the RPi, which is designed to detect my cat, which has a perpetually running Python script that will record a short video if my cat is detected in the live feed. Having recording the video, the script will push the recorded video to a database, which can then be accessed on any platform through an app I created that retrieves the recorded videos from the database.
 
 Here is an abstracted visualization of the project that the above text describes:
 <img width="890" alt="diagram" src="https://github.com/user-attachments/assets/86f6d9e6-2e3a-487e-a40c-8943f0ade212">
-
-## Note
-I originally wanted this project to use a machine learning model to detect my cat specifically, and I nearly succeeded, but there were too many drawbacks to continue using TFLite models for the reasons listed in the timeline and obstacles breakdown<br><br>
-That being said, artifacts of my attempts to use the Tensorflow framework can be found in previous commits, and these are my model training results:
-[content here]
 
 ## Technologies used
 - Python
@@ -29,6 +24,12 @@ That being said, artifacts of my attempts to use the Tensorflow framework can be
 - Tensorflow Custom Model Trainer 
 - UTM
 - Linux (Raspian, Kali Linux)
+- and more(!), which can be found in the timeline and obstacles section
+
+## Note
+I originally wanted this project to use a machine learning model to detect my cat specifically, and I nearly succeeded, but there were too many drawbacks to continue using TFLite models for the reasons listed in the timeline and obstacles breakdown<br><br>
+That being said, artifacts of my attempts to use Tensorflow can be found in previous commits, and these are my model training results:
+<img width="954" alt="1" src="https://github.com/user-attachments/assets/8ce13087-bc4b-4970-83b2-5f3f7a16e139">
 
 ## Project Timeline and Obstacles Breakdown
 Task | Notes | Resolved?
@@ -68,11 +69,12 @@ Wrap up this project | First complete project version published! | ✅
 Find and implement a ML framework that promises good results | Welcome back PyTorch | ✅
 Test ML implementation | Success! I got reliable detections with a pre-built MobileNetV2 model| ✅
 Add caching to Flutter app | Mobile caching works (pretty sure), web caching *maybe* works | ✅
-Improve and add cloud storage rules | - | ✅
-Refactor recording frequency | in progress | -
+Improve cloud storage rules | - | ✅
+Add additional bucket rules through Google Cloud Console | - | ✅
+Refactor recording frequency | - | ✅
 Run some e2e tests | in progress | -
+Deploy web app to Firebase  | in progress | -
 Create new release | - | -
-Deploy web app to Firebase  | - | -
 Wrap up this project | - | -
 \---------- | **V2 PUBLISHED** | ----------
 
