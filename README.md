@@ -96,3 +96,5 @@ Add ability to log in with Google Account | Medium | ❎
 Add option to log in anonymously | Medium | ❎
 QoL: add custom user-based login message | Low | ❎
 QoL: make videos list UI less primitive | Low | ❎
+QoL: change list entry of seen videos | Low | ❎
+QoL: add way to favorite videos | Low | ❎
