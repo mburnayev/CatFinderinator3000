@@ -78,65 +78,21 @@ Add caching to Flutter app | Mobile caching works (pretty sure), web caching *ma
 Improve cloud storage rules | - | ✅
 Add additional bucket rules through Google Cloud Console | - | ✅
 Refactor recording frequency | - | ✅
-Deploy web app to Firebase  | accessible at [catfinderinator3000.web.app](https://catfinderinator3000.web.app) | ✅
-Run some e2e tests | in progress | -
-Create new release | - | -
-Wrap up this project | - | -
+Deploy web app to Firebase  | Accessible at [catfinderinator3000.web.app](https://catfinderinator3000.web.app) | ✅
+Run some e2e tests | A couple quirks here and there, but everything looks good! | ✅
+Create new release | in progress | -
+Wrap up this project | in progress | -
 \---------- | **V2 PUBLISHED** | ----------
 
 ## Future Work, if Revisited
-<table>
-<tr>
-<th align="center">
-<img width="200" height="1">
-<p><small>Task</small></p>
-</th>
-<th align="center">
-<img width="200" height="1">
-<p><small>Priority, if chosen</small></p>
-</th>
-<th align="center">
-<img width="200" height="1">
-<p><small>Done?</small></p>
-</th>
-</tr>
-
-<tr>
-<td align="left">
-<s>Revisit ML frameworks, see if I can create a better performing model using cloud services (Hugging Face, AWS SageMaker, etc.) since building locally was incredibly unviable<br></br>
-Would require retaking and relabeling photos of my cat using the USB camera attached to the RPi since the images used for training and testing are too high quality compared to the RPi's camera
-</td>
-<td align="center">
-High
-</td>
-</td>
-<td align="center">
-✅
-</td>
-</tr>
-
-<tr>
-<td align="left">
-Deploy the app to the Google Play Store
-</td>
-<td align="center">
-Medium
-</td>
-<td align="center">
-❎
-</td>
-</tr>
-
-
-<tr>
-<td align="left">
-Revisit app, see if I can get it to run on iOS</td>
-<td align="center">
-Low
-</td>
-<td align="center">
-❎
-</td>
-</tr>
-
-</table>
+Task | Priority, if chosen | Done?
+--- | --- | ---
+Revisit ML frameworks, ~~see if I can create a better performing model using cloud services (Hugging Face, AWS SageMaker, etc.) since building locally was incredibly unviable<br>Would require retaking and relabeling photos of my cat using the USB camera attached to the RPi since the images used for training and testing are too high quality compared to the RPi's camera~~ ...or I could use a pretrained model ! | High | ✅
+Deploy the app to the Google Play Store | Medium | ❎
+Revisit app, see if I can get it to run on iOS | Low | ❎
+Add feature to get user feedback | High | ❎
+Fix (add?) "Forgot Password?" button dialog | High | ❎
+Add ability to log in with Google Account | Medium | ❎
+Add option to log in anonymously | Medium | ❎
+QoL: add custom user-based login message | Low | ❎
+QoL: make videos list UI less primitive | Low | ❎
