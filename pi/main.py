@@ -90,7 +90,7 @@ def check_keys():
 
         # Record video if user presses 'r' key, will change to record when a detection occurs
         if key == 'r' and not recording:
-            print("Manual video now recording...")
+            print("----------\nManual video now recording...")
             manual_mode = True
             recording = True
 
@@ -99,20 +99,11 @@ def check_keys():
 
         # Stop recording video if user presses 's' key, clear VideoWriter
         elif key == 's' and recording:
-            print("Recording manually stopped!")
+            print("Recording manually stopped!\n----------")
             recording = False
 
             writer.release()
             writer = None
-            path_cloud = "videos/" + title
-            try:
-                user = auth.refresh(user['refreshToken'])
-                storage.child(path_cloud).put(title, user['idToken'])
-            except Exception as e:
-                print("Video probably too small... or you aren't authenticated!")
-                print(e)
-            time.sleep(1)  # delay to publish video to Firebase (just in case)
-            os.remove(title)
             manual_mode = False
 
         # Raise flag for main thread, exit loop, close thread
@@ -126,7 +117,7 @@ def check_keys():
 def main():
     global user, recording, writer, title, manual_mode, quit_flag
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(2)
 
     if not cap.isOpened():
         print("Cannot open camera!")
@@ -186,7 +177,7 @@ def main():
                     if cat_found:
                         # State: () -> (...) — Start recording if cat spotted and not actively recording
                         if not recording:
-                            print("Automatic video now recording...")
+                            print("----------\nAutomatic video now recording...")
                             recording = True
 
                             title = time.strftime("Video_%y.%m.%d_%H.%M.%S.mp4", time.localtime())
@@ -211,16 +202,16 @@ def main():
                                     storage.child(path_cloud).put(title, user['idToken'])
                                     time.sleep(1)
                                     num_recordings += 1
+                                    print("Video pushed to Firebase!\n----------")
                                     if num_recordings == 5:
                                         print("Maximum number of recordings for one day met!")
-                                    print("Video pushed to Firebase!")
 
                                 os.remove(title)
                                 frames_written = 0
                                 empty_frames = 0
                                 recording = False
                     else:
-                        if empty_frames >= 200:
+                        if empty_frames >= 400:
                             # State: () -> () — Stop recording if no detections in a while and recording was True
                             if recording:
                                 writer.release()
@@ -233,11 +224,11 @@ def main():
                                     storage.child(path_cloud).put(title, user['idToken'])
                                     time.sleep(1)
                                     num_recordings += 1
+                                    print("Video pushed to Firebase!\n----------")
                                     if num_recordings == 5:
                                         print("Maximum number of recordings for one day met!")
-                                    print("Video pushed to Firebase!")
                                 else:
-                                    print("Video too small, no push!");
+                                    print("Video too small, no push!\n----------");
 
                                 os.remove(title)
                                 frames_written = 0

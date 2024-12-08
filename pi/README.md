@@ -11,6 +11,12 @@ additional details can be found inside the script
 setup.sh also requires a txt file that has the desired IP address on the local network
 you want the RPI to try to obtain by default
 
+## Note to self:
+- Reattach with `tmux attach`
+- If after the script is stopped, restarted, and the camera can't be found, unplug it and plug it
+  back in and look in /dev/ for thelowest video# -> that will be the new capture index
+- Restarting the pi will reset index back to 0
+
 ## Resources
 Resources used to create setup script:
 - [Stage 1](https://www.tomshardware.com/how-to/static-ip-raspberry-pi)
