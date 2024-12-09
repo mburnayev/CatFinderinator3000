@@ -1,7 +1,7 @@
 # [CatFinderinator3000](https://catfinderinator3000.web.app/)
 Fun little multifaceted project that uses a variety of technologies I've used in the past, am currently using, or have wanted to use — all for the sole purpose of publicly archiving my silly kitty :3
 
-## Project overview
+## Project Overview
 This system is comprised of 3 main components:
 - Raspberry Pi 4B (with camera and an image classifier)
 - Firebase (for app and data authentication, data storage, and webapp deployment)
@@ -12,13 +12,14 @@ The systems starts with the RPi, which has a perpetually running Python script t
 Here is an abstracted visualization of the project that the above text describes:
 <img width="890" alt="diagram" src="https://github.com/user-attachments/assets/86f6d9e6-2e3a-487e-a40c-8943f0ade212">
 
-## Technologies used
+## Technologies Used
 - Python
 - PyTorch
 - OpenCV
 - Dart + Flutter
 - Firebase Authentication
 - Firebase Cloud Storage
+- Firebase Hosting
 - labelImg + Kaggle
 - Tensorflow + TFLite
 - Tensorflow Custom Model Trainer 
@@ -98,3 +99,4 @@ QoL: make videos list UI less primitive | Low | ❎
 QoL: change list entry of seen videos | Low | ❎
 QoL: add way to favorite videos | Low | ❎
 Web: see if a logged-in user can be routed straight to videos list on site refresh | Low | ❎
+Reorg the videos into multiple columns if there's a lot of videos? | Low | ❎
