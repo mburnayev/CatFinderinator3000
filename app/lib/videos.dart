@@ -36,7 +36,7 @@ class _VideosState extends State<Videos> {
 
   // Customized AppBar
   PreferredSizeWidget get topBar {
-    return AppBar(
+    return AppBar(automaticallyImplyLeading: false,
         backgroundColor: Colors.deepPurple,
         elevation: 4,
         title: Center(

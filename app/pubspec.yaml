@@ -45,6 +45,8 @@ dependencies:
   flutter_launcher_icons: ^0.14.1
   chewie: ^1.8.5
   flutter_cache_manager: ^3.4.1
+  google_sign_in: ^6.2.2
+  feedback: ^3.1.0
 
 dev_dependencies:
   flutter_test:

@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 // --- Miscellaneous Libraries
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 // --- Local Package Files ---
 import 'package:cat_finderinator_threethousand/videos.dart';
+import 'package:cat_finderinator_threethousand/demo.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -31,23 +33,6 @@ class _LoginState extends State<Login> {
             await launchUrlString(url);
           }
         });
-  }
-
-  // Generalized widget for the input fields
-  Widget inputField(String label, TextEditingController ctrl, bool obscure) {
-    return SizedBox(
-        child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: Column(children: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.all(0),
-                  child: TextField(
-                    controller: ctrl,
-                    obscureText: obscure,
-                    decoration: InputDecoration(
-                        border: const OutlineInputBorder(), labelText: label),
-                  ))
-            ])));
   }
 
   // Generalized widget for the buttons
@@ -117,9 +102,9 @@ class _LoginState extends State<Login> {
                   "https://github.com/mburnayev"),
               iconTemplate("assets/icon/linkedin_icon.jpeg",
                   "https://www.linkedin.com/in/misha-burnayev/"),
-              iconTemplate(
-                  "assets/icon/about_me_icon.jpeg", "https://www.google.com"),
-              Container(width:20)
+              iconTemplate("assets/icon/about_me_icon.jpeg",
+                  "https://mburnayev-website.web.app/"),
+              Container(width: 20)
             ],
           )
         ],
@@ -130,31 +115,22 @@ class _LoginState extends State<Login> {
     );
   }
 
-  // Adds user to the db if they don't exist, otherwise display appropriate dialogue
-  Future<void> register() async {
-    String emailText = emailCtrl.text;
-    String pwdText = pwdCtrl.text;
-    if (emailText.isNotEmpty && pwdText.isNotEmpty) {
-      try {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: emailText, password: pwdText);
-        alertTemplate("Account successfully created!", "");
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          alertTemplate(
-              "Account creation error", "The password provided is too weak!");
-        } else if (e.code == 'email-already-in-use') {
-          alertTemplate("Account creation error",
-              "The account already exists for that email!");
-        }
-      } catch (e) {
-        alertTemplate(
-            "Account creation error", "Something went unexpectedly wrong!");
-      }
-    } else {
-      alertTemplate("Account creation error",
-          "You need to enter valid credentials to create a new account!");
-    }
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   // Gives or denies access depending on user's presence in Firebase Auth db
@@ -175,19 +151,36 @@ class _LoginState extends State<Login> {
     }
   }
 
-  // Sends an email with a link to reset your password given a username/email
-  Future<void> forgotPassword() async {
-    String emailText = emailCtrl.text;
-    if (emailText.isNotEmpty) {
-      try {
-        await FirebaseAuth.instance.sendPasswordResetEmail(email: emailText);
-      } catch (err) {
-        alertTemplate(
-            "Password reset error", "Password reset email failed to send!");
-      }
-    } else {
-      alertTemplate("Password reset error",
-          "Please enter an associated email to reset a password for!");
+  Future<void> anonymousLogin() async {
+    try {
+      final userCredential = await FirebaseAuth.instance.signInAnonymously();
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const Demo()));
+    } catch (e) {
+      alertTemplate("Demo login error",
+          "An unexpected error has occurred, contact misha@burnayev.com");
+    }
+  }
+
+  Future<void> googleLogin() async {
+    try {
+      // Trigger auth flow, get auth details from the request
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      final credentials =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const Videos()));
+    } catch (e) {
+      alertTemplate("Google login error",
+          "An unexpected error has occurred:\n${e.toString()}\n\nContact misha@burnayev.com for resolution");
     }
   }
 
@@ -199,15 +192,12 @@ class _LoginState extends State<Login> {
           child: OverflowBox(
               child: Column(
         children: <Widget>[
-          inputField("Email (Username)", emailCtrl, false),
-          inputField("Password", pwdCtrl, true),
           Container(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              loginActionButton("Forgot Password?", forgotPassword),
-              loginActionButton("Sign Up", register),
-              loginActionButton("Log in", login),
+              loginActionButton("Log in with Google", googleLogin),
+              loginActionButton("Demo app anonymously", anonymousLogin),
             ],
           ),
           Container(height: 20),
