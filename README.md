@@ -91,9 +91,9 @@ Revisit ML frameworks, ~~see if I can create a better performing model using clo
 Deploy the app to the Google Play Store | Medium | ❎
 Revisit app, see if I can get it to run on iOS | Low | ❎
 Add feature to get user feedback | High | ❎
-Fix (add?) "Forgot Password?" button dialog | High | ❎
+~~Fix (add?) "Forgot Password?" button dialog~~ | ~~High~~ | ~~❎~~
 Add ability to log in with Google Account | Medium | ❎
-Add option to log in anonymously | Medium | ❎
+Add option to log in anonymously | Medium | ✅
 QoL: add custom user-based login message | Low | ❎
 QoL: make videos list UI less primitive | Low | ❎
 QoL: change list entry of seen videos | Low | ❎
