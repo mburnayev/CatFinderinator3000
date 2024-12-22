@@ -17,12 +17,25 @@ class _DemoState extends State<Demo> {
   // Customized AppBar
   PreferredSizeWidget get topBar {
     return AppBar(
-        backgroundColor: Colors.deepPurple,
-        elevation: 4,
-        title: Center(
-            child: const Text("CatFinderinator3000 demo: example recordings",
-                style: TextStyle(fontSize: 24, color: Colors.white))));
+      backgroundColor: Colors.deepPurple,
+      title: LayoutBuilder(
+        builder: (context, constraints) {
+          double availableWidth = constraints.maxWidth;
+          double fontSize = availableWidth * 0.015;
+          fontSize = fontSize.clamp(14.0, 32.0);
+
+          return Text(
+            "CatFinderinator3000 demo: example recordings",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: fontSize,
+            ),
+          );
+        },
+      ),
+    );
   }
+
 
   // Scaffold for demo videos included as app assets, redirects user to video on press
   Widget get videoListScaffold {

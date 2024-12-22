@@ -9,13 +9,16 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cat_finderinator_threethousand/video_player.dart';
 
 class Videos extends StatefulWidget {
-  const Videos({super.key});
+  final String username;
+
+  const Videos({super.key, required this.username});
 
   @override
   State<Videos> createState() => _VideosState();
 }
 
 class _VideosState extends State<Videos> {
+  late var username = widget.username;
   final storageRef = FirebaseStorage.instance.ref().child("videos");
   List<String> videoNamesList = [];
 
@@ -36,12 +39,26 @@ class _VideosState extends State<Videos> {
 
   // Customized AppBar
   PreferredSizeWidget get topBar {
-    return AppBar(automaticallyImplyLeading: false,
-        backgroundColor: Colors.deepPurple,
-        elevation: 4,
-        title: Center(
-            child: const Text("Cat Videos!",
-                style: TextStyle(fontSize: 24, color: Colors.white))));
+    return AppBar(
+      automaticallyImplyLeading: false,
+      backgroundColor: Colors.deepPurple,
+      title: LayoutBuilder(
+        builder: (context, constraints) {
+          double availableWidth = constraints.maxWidth;
+          double fontSize = availableWidth * 0.015;
+          fontSize = fontSize.clamp(12.0, 32.0);
+
+          return Center(
+              child: Text(
+            "Welcome ${widget.username}, here are the available cat videos:",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: fontSize,
+            ),
+          ));
+        },
+      ),
+    );
   }
 
   // Scaffold that is used when no videos are present in videos list

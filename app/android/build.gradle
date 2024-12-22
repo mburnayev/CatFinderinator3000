@@ -1,29 +1,8 @@
-//buildscript {
-//    ext.kotlin_version = '1.9.10'
-//    repositories {
-//        google()
-//        mavenCentral()
-//    }
-//
-//    dependencies {
-//        classpath 'com.android.tools.build:gradle:7.1.2'
-//        // START: FlutterFire Configuration
-//        classpath 'com.google.gms:google-services:4.3.10'
-//        // END: FlutterFire Configuration
-//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-//    }
-//}
-
 allprojects {
     repositories {
         google()
         mavenCentral()
     }
-}
-
-plugins {
-    // Add the dependency for the Google services Gradle plugin
-    id 'com.google.gms.google-services' version '4.4.2' apply false
 }
 
 rootProject.buildDir = '../build'

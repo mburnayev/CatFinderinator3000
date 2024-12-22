@@ -1,5 +1,6 @@
 // --- Dart/Flutter libraries ---
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 // --- Miscellaneous Libraries
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,9 +19,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  // Controller used to intake user credentials
-  var emailCtrl = TextEditingController(), pwdCtrl = TextEditingController();
-
   // Generalized widget for adding icons
   Widget iconTemplate(String iconPath, String url) {
     return IconButton(
@@ -36,19 +34,34 @@ class _LoginState extends State<Login> {
   }
 
   // Generalized widget for the buttons
-  Widget loginActionButton(String text, Function action) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: ElevatedButton(
-          onPressed: () => action(),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.deepPurple,
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-          ),
-          child: Text(text)),
+  Widget loginActionButton(String text, Function action, String imagePath) {
+    return Expanded(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          double availableWidth = constraints.maxWidth;
+          double fontSize = availableWidth * 0.015;
+          fontSize = fontSize.clamp(16.0, 32.0);
+
+          return ElevatedButton(
+              onPressed: () => action(),
+              style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  side: BorderSide(width: 2)),
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Image.asset(
+                  imagePath, // Image from local assets
+                  height: 22, // You can adjust the size of the image
+                  width: 22, // Width of the image
+                  fit: BoxFit.contain, // Adjust the image scaling (optional)
+                ),
+                const SizedBox(width: 10), // Space between image and text
+                Text(text), // Text on the right side
+              ]));
+        },
+      ),
     );
   }
 
@@ -85,75 +98,40 @@ class _LoginState extends State<Login> {
   // Customized AppBar
   PreferredSizeWidget get topBar {
     return AppBar(
-      actions: [],
-      title: Stack(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: const Text(
-                  "CatFinderinator3000",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
+        backgroundColor: Colors.deepPurple,
+        title: Stack(children: [
+          Row(children: [
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  double availableWidth = constraints.maxWidth;
+                  double fontSize = availableWidth * 0.015;
+                  fontSize = fontSize.clamp(16.0, 32.0);
+
+                  return Text(
+                    "CatFinderinator3000",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: fontSize,
+                    ),
+                  );
+                },
               ),
-              iconTemplate("assets/icon/github_icon.jpeg",
-                  "https://github.com/mburnayev"),
-              iconTemplate("assets/icon/linkedin_icon.jpeg",
-                  "https://www.linkedin.com/in/misha-burnayev/"),
-              iconTemplate("assets/icon/about_me_icon.jpeg",
-                  "https://mburnayev-website.web.app/"),
-              Container(width: 20)
-            ],
-          )
-        ],
-      ),
-      centerTitle: false,
-      backgroundColor: Colors.deepPurple,
-      elevation: 4,
-    );
-  }
-
-  Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
-  }
-
-  // Gives or denies access depending on user's presence in Firebase Auth db
-  Future<void> login() async {
-    if (context.mounted) {
-      try {
-        // determines whether user credentials are in Firebase Auth
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: emailCtrl.text, password: pwdCtrl.text);
-
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const Videos()));
-        emailCtrl.clear();
-        pwdCtrl.clear();
-      } catch (e) {
-        alertTemplate("Login error", "Invalid username and/or password!");
-      }
-    }
+            ),
+            iconTemplate(
+                "assets/icon/github_icon.jpeg", "https://github.com/mburnayev"),
+            iconTemplate("assets/icon/linkedin_icon.jpeg",
+                "https://www.linkedin.com/in/misha-burnayev/"),
+            iconTemplate("assets/icon/about_me_icon.jpeg",
+                "https://mburnayev-website.web.app/"),
+            Container(width: 20)
+          ])
+        ]));
   }
 
   Future<void> anonymousLogin() async {
     try {
-      final userCredential = await FirebaseAuth.instance.signInAnonymously();
+      await FirebaseAuth.instance.signInAnonymously();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const Demo()));
     } catch (e) {
@@ -164,23 +142,36 @@ class _LoginState extends State<Login> {
 
   Future<void> googleLogin() async {
     try {
-      // Trigger auth flow, get auth details from the request
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+      if (kIsWeb) {
+        GoogleAuthProvider googleProvider = GoogleAuthProvider();
+        googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
 
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
+        await FirebaseAuth.instance.signInWithPopup(googleProvider);
+      } else {
+        final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+        final GoogleSignInAuthentication? googleAuth =
+            await googleUser?.authentication;
 
-      final credentials =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const Videos()));
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth?.accessToken,
+          idToken: googleAuth?.idToken,
+        );
+
+        await FirebaseAuth.instance.signInWithCredential(credential);
+      }
+
+      final credentials = FirebaseAuth.instance.currentUser;
+      final String? username = credentials?.displayName;
+
+      if (username != null) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Videos(username: username)));
+      }
     } catch (e) {
       alertTemplate("Google login error",
-          "An unexpected error has occurred:\n${e.toString()}\n\nContact misha@burnayev.com for resolution");
+          "An unexpected error has occurred:\n${e.toString()}\n\nContact misha@burnayev.com with a screenshot of this error to address this issue.");
     }
   }
 
@@ -196,8 +187,10 @@ class _LoginState extends State<Login> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              loginActionButton("Log in with Google", googleLogin),
-              loginActionButton("Demo app anonymously", anonymousLogin),
+              loginActionButton("Log in with Google", googleLogin,
+                  "assets/icon/google_icon.jpeg"),
+              loginActionButton("Demo app", anonymousLogin,
+                  "assets/icon/incognito_icon.jpeg"),
             ],
           ),
           Container(height: 20),

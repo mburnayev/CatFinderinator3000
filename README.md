@@ -91,12 +91,12 @@ Revisit ML frameworks, ~~see if I can create a better performing model using clo
 Deploy the app to the Google Play Store | Medium | ❎
 Revisit app, see if I can get it to run on iOS | Low | ❎
 Add feature to get user feedback | High | ❎
-~~Fix (add?) "Forgot Password?" button dialog~~ | ~~High~~ | ~~❎~~
-Add ability to log in with Google Account | Medium | ❎
+~~Fix (add?) "Forgot Password?" button dialog~~ <br> <i>(Email + pwd sign-in method deprecated)</i> | ~~High~~ | -
+Add ability to log in with Google Account | Medium | ✅
 Add option to log in anonymously | Medium | ✅
-QoL: add custom user-based login message | Low | ❎
-QoL: make videos list UI less primitive | Low | ❎
+QoL: add custom user-based login message | Low | ✅
+~~QoL: make videos list UI less primitive~~ <br> <i>(Too vague, other tasks specify which UI elements need refactoring)</i> | ~~Low~~ | -
 QoL: change list entry of seen videos | Low | ❎
 QoL: add way to favorite videos | Low | ❎
-Web: see if a logged-in user can be routed straight to videos list on site refresh | Low | ❎
+~~Web: see if a logged-in user can be routed straight to videos list on site refresh~~ <br> <i>(App is simple, reauth is fairly quick (and credentials get cached anyway...)</i> | ~~Low~~ | -
 Reorg the videos into multiple columns if there's a lot of videos? | Low | ❎
