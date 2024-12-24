@@ -87,8 +87,8 @@ Wrap up this project | - | ✅
 ## Future Work, if Revisited
 Task | Priority, if chosen | Done?
 --- | --- | ---
-Revisit ML frameworks, ~~see if I can create a better performing model using cloud services (Hugging Face, AWS SageMaker, etc.) since building locally was incredibly unviable~~<br> ...or I could use a pretrained model ! | High | ✅
-Add feature to get user feedback | High | ❎
+Revisit ML frameworks ~~, see if I can create a better performing model using cloud services (Hugging Face, AWS SageMaker, etc.) since building locally was incredibly unviable~~<br> ...and use a pretrained model ! | High | ✅
+~~Add feature to get user feedback~~ <br> <i>(This feature implies I'll come back to this project to update it, which isn't happening)</i> | ~~High~~ | -
 ~~Fix (add?) "Forgot Password?" button dialog~~ <br> <i>(Email + pwd sign-in method deprecated)</i> | ~~High~~ | -
 Add ability to log in with Google Account | Medium | ✅
 Add option to log in anonymously | Medium | ✅

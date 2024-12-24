@@ -22,7 +22,6 @@ class _VideosState extends State<Videos> {
   final storageRef = FirebaseStorage.instance.ref().child("videos");
 
   List<String> yearsList = [];
-
   // Maps to track selected items and loaded children
   Map<String, List<String>> yearMonths = {};
   Map<String, List<String>> monthDays = {};
@@ -34,7 +33,17 @@ class _VideosState extends State<Videos> {
       for (var item in listResult.prefixes) {
         yearsList.add(item.name);
       }
+      yearsList.sort((a, b) => int.parse(b).compareTo(int.parse(a)));
     });
+  }
+
+  // Helper function tying months to their calendarial indexes
+  int indexMonth(String month) {
+    const List<String> monthOrder = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    return monthOrder.indexOf(month);
   }
 
   // Retrieves month directories for given year from Firebase Cloud Storage bucket
@@ -50,6 +59,7 @@ class _VideosState extends State<Videos> {
     for (var prefix in listResult.prefixes) {
       months.add(prefix.name);
     }
+    months.sort((a, b) => indexMonth(b).compareTo(indexMonth(a)));
 
     yearMonths[year] = months;
     return months;
@@ -57,7 +67,7 @@ class _VideosState extends State<Videos> {
 
   // Retrieves day directories for given month from Firebase Cloud Storage bucket
   Future<List<String>> getDays(String year, String month) async {
-    final key = '$year/$month';
+    final key = "$year/$month";
     if (monthDays.containsKey(key)) {
       return monthDays[key]!;
     }
@@ -77,7 +87,7 @@ class _VideosState extends State<Videos> {
 
   // Retrieves videos for given day from Firebase Cloud Storage bucket
   Future<List<String>> getVideos(String year, String month, String day) async {
-    final key = '$year/$month/$day';
+    final key = "$year/$month/$day";
     if (dayVideos.containsKey(key)) {
       return dayVideos[key]!;
     }
@@ -89,6 +99,7 @@ class _VideosState extends State<Videos> {
     for (var item in listResult.items) {
       videos.add(item.name);
     }
+    videos.sort((a, b) => b.compareTo(a));
 
     dayVideos[key] = videos;
     return videos;
@@ -210,7 +221,7 @@ class _VideosState extends State<Videos> {
             }));
   }
 
-  // Buffers then retrieves correct Scaffold depending on number of videos
+  // Scaffold selected based on whether directories (and subsequent videos) are present in Cloud Storage
   Widget get homeApp {
     return ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(
@@ -225,7 +236,7 @@ class _VideosState extends State<Videos> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
+                  return Text("Error: ${snapshot.error}");
                 } else {
                   Widget finalScaffold = const Scaffold();
                   finalScaffold = (yearsList.isEmpty) ? noVideosScaffold : videoDirectoryScaffold;
