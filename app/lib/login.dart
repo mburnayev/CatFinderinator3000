@@ -35,31 +35,22 @@ class _LoginState extends State<Login> {
 
   // Generalized widget for the buttons
   Widget loginActionButton(String text, Function action, String imagePath) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 3.0),
-      child: Expanded(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return ElevatedButton(
-                onPressed: () => action(),
-                style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    side: const BorderSide(width: 2)),
-                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Image.asset(
-                    imagePath,
-                    height: 22,
-                    width: 22,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(width: 10),
-                  Text(text),
-                ]));
-          },
-        ),
-      ),
-    );
+    return ElevatedButton(
+        onPressed: () => action(),
+        style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.black,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            side: const BorderSide(width: 2)),
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Image.asset(
+            imagePath,
+            height: 22,
+            width: 22,
+            fit: BoxFit.contain,
+          ),
+          const SizedBox(width: 10),
+          Text(text),
+        ]));
   }
 
   // Generalized widget for rendering images
@@ -164,17 +155,17 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: topBar,
-      body: Form(
-          child: OverflowBox(
-              child: Column(
+      body: OverflowBox(
+          child: Column(
         children: <Widget>[
           Container(height: 20),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Flexible(
                 child: loginActionButton("Log in with Google", googleLogin, "assets/icon/google_icon.jpeg"),
               ),
+              const SizedBox(width: 16),
               Flexible(
                 child: loginActionButton("Demo app", anonymousLogin, "assets/icon/incognito_icon.jpeg"),
               ),
@@ -190,7 +181,7 @@ class _LoginState extends State<Login> {
           ),
           imageTemplate("assets/fullres/login_cat_filler.jpeg", false)
         ],
-      ))),
+      )),
     );
   }
 }
