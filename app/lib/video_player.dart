@@ -90,12 +90,14 @@ class _VideoState extends State<VideoPlayerScreen> {
 
   // Customized AppBar
   PreferredSizeWidget get topBar {
+    var videoNameStart = (widget.videoName).indexOf("Video");
+    var videoNameEnd = (widget.videoName).indexOf(".mp4");
     return AppBar(
         backgroundColor: Colors.deepPurple,
         elevation: 4,
         title: Center(
             child:
-                Text(widget.videoName, style: TextStyle(color: Colors.white))));
+                Text((widget.videoName).substring(videoNameStart + 6, videoNameEnd), style: TextStyle(color: Colors.white))));
   }
 
   @override

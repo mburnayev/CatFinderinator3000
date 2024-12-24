@@ -87,16 +87,12 @@ Wrap up this project | - | ✅
 ## Future Work, if Revisited
 Task | Priority, if chosen | Done?
 --- | --- | ---
-Revisit ML frameworks, ~~see if I can create a better performing model using cloud services (Hugging Face, AWS SageMaker, etc.) since building locally was incredibly unviable<br>Would require retaking and relabeling photos of my cat using the USB camera attached to the RPi since the images used for training and testing are too high quality compared to the RPi's camera~~ ...or I could use a pretrained model ! | High | ✅
-Deploy the app to the Google Play Store | Medium | ❎
-Revisit app, see if I can get it to run on iOS | Low | ❎
+Revisit ML frameworks, ~~see if I can create a better performing model using cloud services (Hugging Face, AWS SageMaker, etc.) since building locally was incredibly unviable~~<br> ...or I could use a pretrained model ! | High | ✅
 Add feature to get user feedback | High | ❎
 ~~Fix (add?) "Forgot Password?" button dialog~~ <br> <i>(Email + pwd sign-in method deprecated)</i> | ~~High~~ | -
 Add ability to log in with Google Account | Medium | ✅
 Add option to log in anonymously | Medium | ✅
 QoL: add custom user-based login message | Low | ✅
 ~~QoL: make videos list UI less primitive~~ <br> <i>(Too vague, other tasks specify which UI elements need refactoring)</i> | ~~Low~~ | -
-QoL: change list entry of seen videos | Low | ❎
-QoL: add way to favorite videos | Low | ❎
 ~~Web: see if a logged-in user can be routed straight to videos list on site refresh~~ <br> <i>(App is simple, reauth is fairly quick (and credentials get cached anyway...)</i> | ~~Low~~ | -
-Reorg the videos into multiple columns if there's a lot of videos? | Low | ❎
+~~Reorg the videos into multiple columns if there's a lot of videos?~~ <br> Changed the entire structure of the "videos" page, now structured as a file navigator | Low | ✅

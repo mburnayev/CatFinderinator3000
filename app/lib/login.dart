@@ -35,32 +35,29 @@ class _LoginState extends State<Login> {
 
   // Generalized widget for the buttons
   Widget loginActionButton(String text, Function action, String imagePath) {
-    return Expanded(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          double availableWidth = constraints.maxWidth;
-          double fontSize = availableWidth * 0.015;
-          fontSize = fontSize.clamp(16.0, 32.0);
-
-          return ElevatedButton(
-              onPressed: () => action(),
-              style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  side: BorderSide(width: 2)),
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Image.asset(
-                  imagePath, // Image from local assets
-                  height: 22, // You can adjust the size of the image
-                  width: 22, // Width of the image
-                  fit: BoxFit.contain, // Adjust the image scaling (optional)
-                ),
-                const SizedBox(width: 10), // Space between image and text
-                Text(text), // Text on the right side
-              ]));
-        },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3.0),
+      child: Expanded(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return ElevatedButton(
+                onPressed: () => action(),
+                style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    side: const BorderSide(width: 2)),
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Image.asset(
+                    imagePath,
+                    height: 22,
+                    width: 22,
+                    fit: BoxFit.contain,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(text),
+                ]));
+          },
+        ),
       ),
     );
   }
@@ -91,8 +88,7 @@ class _LoginState extends State<Login> {
   void alertTemplate(String errorTitle, String errorBody) {
     showDialog(
         context: context,
-        builder: (BuildContext context) =>
-            AlertDialog(title: Text(errorTitle), content: Text(errorBody)));
+        builder: (BuildContext context) => AlertDialog(title: Text(errorTitle), content: Text(errorBody)));
   }
 
   // Customized AppBar
@@ -118,13 +114,9 @@ class _LoginState extends State<Login> {
                 },
               ),
             ),
-            iconTemplate(
-                "assets/icon/github_icon.jpeg", "https://github.com/mburnayev"),
-            iconTemplate("assets/icon/linkedin_icon.jpeg",
-                "https://www.linkedin.com/in/misha-burnayev/"),
-            iconTemplate("assets/icon/about_me_icon.jpeg",
-                "https://mburnayev-website.web.app/"),
-            Container(width: 20)
+            iconTemplate("assets/icon/github_icon.jpeg", "https://github.com/mburnayev"),
+            iconTemplate("assets/icon/linkedin_icon.jpeg", "https://www.linkedin.com/in/misha-burnayev/"),
+            iconTemplate("assets/icon/about_me_icon.jpeg", "https://mburnayev-website.web.app/"),
           ])
         ]));
   }
@@ -132,11 +124,9 @@ class _LoginState extends State<Login> {
   Future<void> anonymousLogin() async {
     try {
       await FirebaseAuth.instance.signInAnonymously();
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const Demo()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const Demo()));
     } catch (e) {
-      alertTemplate("Demo login error",
-          "An unexpected error has occurred, contact misha@burnayev.com");
+      alertTemplate("Demo login error", "An unexpected error has occurred, contact misha@burnayev.com");
     }
   }
 
@@ -149,8 +139,7 @@ class _LoginState extends State<Login> {
         await FirebaseAuth.instance.signInWithPopup(googleProvider);
       } else {
         final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-        final GoogleSignInAuthentication? googleAuth =
-            await googleUser?.authentication;
+        final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
         final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth?.accessToken,
@@ -164,10 +153,7 @@ class _LoginState extends State<Login> {
       final String? username = credentials?.displayName;
 
       if (username != null) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Videos(username: username)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Videos(username: username)));
       }
     } catch (e) {
       alertTemplate("Google login error",
@@ -187,10 +173,12 @@ class _LoginState extends State<Login> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              loginActionButton("Log in with Google", googleLogin,
-                  "assets/icon/google_icon.jpeg"),
-              loginActionButton("Demo app", anonymousLogin,
-                  "assets/icon/incognito_icon.jpeg"),
+              Flexible(
+                child: loginActionButton("Log in with Google", googleLogin, "assets/icon/google_icon.jpeg"),
+              ),
+              Flexible(
+                child: loginActionButton("Demo app", anonymousLogin, "assets/icon/incognito_icon.jpeg"),
+              ),
             ],
           ),
           Container(height: 20),
