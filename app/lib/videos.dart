@@ -105,6 +105,7 @@ class _VideosState extends State<Videos> {
     return videos;
   }
 
+  // Clears cached video routing info on refresh
   Future<void> refreshHelper() async {
     setState(() {
       yearsList = [];

@@ -126,7 +126,8 @@ class _LoginState extends State<Login> {
       await FirebaseAuth.instance.signInAnonymously();
       Navigator.push(context, MaterialPageRoute(builder: (context) => const Demo()));
     } catch (e) {
-      alertTemplate("Demo login error", "An unexpected error has occurred, contact misha@burnayev.com");
+      alertTemplate("Demo login error",
+          "An unexpected error has occurred:\n${e.toString()}\n\nContact misha@burnayev.com with a screenshot of this error to address this issue.");
     }
   }
 
@@ -134,7 +135,6 @@ class _LoginState extends State<Login> {
     try {
       if (kIsWeb) {
         GoogleAuthProvider googleProvider = GoogleAuthProvider();
-        googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
 
         await FirebaseAuth.instance.signInWithPopup(googleProvider);
       } else {
@@ -145,7 +145,6 @@ class _LoginState extends State<Login> {
           accessToken: googleAuth?.accessToken,
           idToken: googleAuth?.idToken,
         );
-
         await FirebaseAuth.instance.signInWithCredential(credential);
       }
 

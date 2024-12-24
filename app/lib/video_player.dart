@@ -43,11 +43,13 @@ class _VideoState extends State<VideoPlayerScreen> {
     final videoRef = storageRef.child(widget.videoName);
     final videoURL = await videoRef.getDownloadURL();
     FileInfo? videoInfo = await videoCacheManager.getFileFromCache(videoURL);
+
     // If we haven't accessed this widget earlier, get the video from network and cache it
     if (videoInfo == null) {
       final videoBytes = await videoRef.getData(10000000);
       await videoCacheManager.putFile(videoURL, videoBytes!);
     }
+
     // Second time is the charm (the video should definitely exist in cache now)
     videoInfo = await videoCacheManager.getFileFromCache(videoURL);
     if (videoInfo != null) {
@@ -74,7 +76,6 @@ class _VideoState extends State<VideoPlayerScreen> {
             VideoPlayerController.networkUrl(Uri.parse(videoURL), httpHeaders: {
           "Cache-Control": "max-age=7200",
         });
-        // videoPlayerController = VideoPlayerController.asset(videoFile);
       } else {
         // Playing the file from cache works on Android though :)
         videoPlayerController = VideoPlayerController.file(videoFile);
@@ -117,7 +118,7 @@ class _VideoState extends State<VideoPlayerScreen> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
+                return Text("Error: ${snapshot.error}");
               } else {
                 return playerWidget;
               }
