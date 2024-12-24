@@ -1,4 +1,5 @@
 // --- Dart/Flutter libraries ---
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // --- Local Package Files ---
@@ -12,7 +13,9 @@ class Demo extends StatefulWidget {
 }
 
 class _DemoState extends State<Demo> {
-  List<String> videoNamesList = ["demo_video_1.mp4", "demo_video_2.mp4", "demo_video_3.mp4"];
+  List<String> debugVideos = ["demo_video_1.mp4", "demo_video_2.mp4", "demo_video_3.mp4"];
+  List<String> prodVideos = ["assets/demo_videos/demo_video_1.mp4", "assets/demo_videos/demo_video_2.mp4", "assets/demo_videos/demo_video_3.mp4"];
+  late List<String> videoNamesList = (kReleaseMode) ? prodVideos : debugVideos;
 
   // Customized AppBar
   PreferredSizeWidget get topBar {
