@@ -10,13 +10,15 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Clone repository
       - uses: actions/checkout@v4
-      - run: npm ci
+
+      - name: Set up Flutter
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CATFINDERINATOR3000 }}
-          channelId: live
+          channel: main
           projectId: catfinderinator3000
-        env:
-          FIREBASE_CLI_EXPERIMENTS: webframeworks
+      - run: flutter pub get
+      - run: flutter build web
