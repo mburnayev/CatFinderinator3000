@@ -29,9 +29,11 @@ class DemoVideoPlayerScreen extends StatefulWidget {
 class _DemoVideoState extends State<DemoVideoPlayerScreen> {
   late var videoName = "/demo_videos/${widget.videoName}";
 
-  late VideoPlayerController videoPlayerController = (kIsWeb)
-      ? VideoPlayerController.asset(videoName)
-      : VideoPlayerController.asset("assets$videoName");
+  // late VideoPlayerController videoPlayerController = (kIsWeb)
+  //     ? VideoPlayerController.asset(videoName)
+  //     : VideoPlayerController.asset("assets$videoName");
+
+  late VideoPlayerController videoPlayerController = VideoPlayerController.asset("assets$videoName");
 
   late ChewieController chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
