@@ -72,8 +72,7 @@ class _VideoState extends State<VideoPlayerScreen> {
       // Using html/universal_html package -> Unsupported operation: _Namespace
       // Using Dio package -> Unsupported operation: _Namespace
       if (kIsWeb) {
-        videoPlayerController =
-            VideoPlayerController.networkUrl(Uri.parse(videoURL), httpHeaders: {
+        videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(videoURL), httpHeaders: {
           "Cache-Control": "max-age=7200",
         });
       } else {
@@ -81,10 +80,7 @@ class _VideoState extends State<VideoPlayerScreen> {
         videoPlayerController = VideoPlayerController.file(videoFile);
       }
       chewieController = ChewieController(
-          videoPlayerController: videoPlayerController,
-          aspectRatio: 1.33,
-          autoPlay: true,
-          looping: false);
+          videoPlayerController: videoPlayerController, aspectRatio: 1.33, autoPlay: true, looping: false);
       playerWidget = Chewie(controller: chewieController);
     }
   }
@@ -97,8 +93,8 @@ class _VideoState extends State<VideoPlayerScreen> {
         backgroundColor: Colors.deepPurple,
         elevation: 4,
         title: Center(
-            child:
-                Text((widget.videoName).substring(videoNameStart + 6, videoNameEnd), style: TextStyle(color: Colors.white))));
+            child: Text((widget.videoName).substring(videoNameStart + 6, videoNameEnd),
+                style: TextStyle(color: Colors.white))));
   }
 
   @override

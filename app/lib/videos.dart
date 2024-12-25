@@ -22,6 +22,7 @@ class _VideosState extends State<Videos> {
   final storageRef = FirebaseStorage.instance.ref().child("videos");
 
   List<String> yearsList = [];
+
   // Maps to track selected items and loaded children
   Map<String, List<String>> yearMonths = {};
   Map<String, List<String>> monthDays = {};
@@ -40,8 +41,18 @@ class _VideosState extends State<Videos> {
   // Helper function tying months to their calendarial indexes
   int indexMonth(String month) {
     const List<String> monthOrder = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
     ];
     return monthOrder.indexOf(month);
   }
@@ -232,19 +243,18 @@ class _VideosState extends State<Videos> {
         child: RefreshIndicator(
             onRefresh: refreshHelper,
             child: FutureBuilder<void>(
-              future: getYears(),
-              builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Text("Error: ${snapshot.error}");
-                } else {
-                  Widget finalScaffold = const Scaffold();
-                  finalScaffold = (yearsList.isEmpty) ? noVideosScaffold : videoDirectoryScaffold;
-                  return finalScaffold;
-                }
-              },
-            )));
+                future: getYears(),
+                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Text("Error: ${snapshot.error}");
+                  } else {
+                    Widget finalScaffold = const Scaffold();
+                    finalScaffold = (yearsList.isEmpty) ? noVideosScaffold : videoDirectoryScaffold;
+                    return finalScaffold;
+                  }
+                })));
   }
 
   @override

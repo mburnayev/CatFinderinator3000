@@ -1,6 +1,5 @@
 // --- Dart/Flutter libraries ---
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 // --- Miscellaneous Libraries
 import 'package:video_player/video_player.dart';
@@ -28,11 +27,6 @@ class DemoVideoPlayerScreen extends StatefulWidget {
 
 class _DemoVideoState extends State<DemoVideoPlayerScreen> {
   late var videoName = "/demo_videos/${widget.videoName}";
-
-  // late VideoPlayerController videoPlayerController = (kIsWeb)
-  //     ? VideoPlayerController.asset(videoName)
-  //     : VideoPlayerController.asset("assets$videoName");
-
   late VideoPlayerController videoPlayerController = VideoPlayerController.asset("assets$videoName");
 
   late ChewieController chewieController = ChewieController(

@@ -1,5 +1,4 @@
 // --- Dart/Flutter libraries ---
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // --- Local Package Files ---
@@ -13,33 +12,24 @@ class Demo extends StatefulWidget {
 }
 
 class _DemoState extends State<Demo> {
-  // List<String> debugVideos = ["demo_video_1.mp4", "demo_video_2.mp4", "demo_video_3.mp4"];
-  // List<String> prodVideos = ["assets/demo_videos/demo_video_1.mp4", "assets/demo_videos/demo_video_2.mp4", "assets/demo_videos/demo_video_3.mp4"];
-  // late List<String> videoNamesList = (kReleaseMode) ? prodVideos : debugVideos;
   List<String> videoNamesList = ["demo_video_1.mp4", "demo_video_2.mp4", "demo_video_3.mp4"];
 
   // Customized AppBar
   PreferredSizeWidget get topBar {
     return AppBar(
-      backgroundColor: Colors.deepPurple,
-      title: LayoutBuilder(
-        builder: (context, constraints) {
+        backgroundColor: Colors.deepPurple,
+        title: LayoutBuilder(builder: (context, constraints) {
           double availableWidth = constraints.maxWidth;
           double fontSize = availableWidth * 0.015;
           fontSize = fontSize.clamp(14.0, 32.0);
 
-          return Text(
-            "CatFinderinator3000 demo: example recordings",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: fontSize,
-            ),
-          );
-        },
-      ),
-    );
+          return Text("CatFinderinator3000 demo: example recordings",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: fontSize,
+              ));
+        }));
   }
-
 
   // Scaffold for demo videos included as app assets, redirects user to video on press
   Widget get videoListScaffold {
@@ -52,10 +42,7 @@ class _DemoState extends State<Demo> {
               return ElevatedButton(
                   child: Text(videoNamesList[index].toString()),
                   onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              DemoVideo(name: videoNamesList[index]))));
+                      context, MaterialPageRoute(builder: (context) => DemoVideo(name: videoNamesList[index]))));
             }));
   }
 

@@ -88,23 +88,17 @@ class _LoginState extends State<Login> {
         backgroundColor: Colors.deepPurple,
         title: Stack(children: [
           Row(children: [
-            Expanded(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  double availableWidth = constraints.maxWidth;
-                  double fontSize = availableWidth * 0.015;
-                  fontSize = fontSize.clamp(16.0, 32.0);
+            Expanded(child: LayoutBuilder(builder: (context, constraints) {
+              double availableWidth = constraints.maxWidth;
+              double fontSize = availableWidth * 0.015;
+              fontSize = fontSize.clamp(16.0, 32.0);
 
-                  return Text(
-                    "CatFinderinator3000",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: fontSize,
-                    ),
-                  );
-                },
-              ),
-            ),
+              return Text("CatFinderinator3000",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: fontSize,
+                  ));
+            })),
             iconTemplate("assets/icon/github_icon.jpeg", "https://github.com/mburnayev"),
             iconTemplate("assets/icon/linkedin_icon.jpeg", "https://www.linkedin.com/in/misha-burnayev/"),
             iconTemplate("assets/icon/about_me_icon.jpeg", "https://mburnayev-website.web.app/"),
@@ -154,34 +148,26 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: topBar,
-      body: OverflowBox(
-          child: Column(
-        children: <Widget>[
-          Container(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Flexible(
-                child: loginActionButton("Log in with Google", googleLogin, "assets/icon/google_icon.jpeg"),
-              ),
-              const SizedBox(width: 16),
-              Flexible(
-                child: loginActionButton("Demo app", anonymousLogin, "assets/icon/incognito_icon.jpeg"),
-              ),
-            ],
-          ),
-          Container(height: 20),
-          Row(
-            children: <Widget>[
-              imageTemplate("assets/fullres/login_cat_left.jpeg", true),
-              imageTemplate("assets/fullres/login_cat_center.jpeg", true),
-              imageTemplate("assets/fullres/login_cat_right.jpeg", true)
-            ],
-          ),
+        appBar: topBar,
+        body: OverflowBox(
+            child: Column(children: <Widget>[
+          Container(height: 30),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
+            Flexible(
+              child: loginActionButton("Log in with Google", googleLogin, "assets/icon/google_icon.jpeg"),
+            ),
+            const SizedBox(width: 15),
+            Flexible(
+              child: loginActionButton("Demo app", anonymousLogin, "assets/icon/incognito_icon.jpeg"),
+            )
+          ]),
+          Container(height: 30),
+          Row(children: <Widget>[
+            imageTemplate("assets/fullres/login_cat_left.jpeg", true),
+            imageTemplate("assets/fullres/login_cat_center.jpeg", true),
+            imageTemplate("assets/fullres/login_cat_right.jpeg", true)
+          ]),
           imageTemplate("assets/fullres/login_cat_filler.jpeg", false)
-        ],
-      )),
-    );
+        ])));
   }
 }
