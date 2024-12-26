@@ -101,7 +101,7 @@ class _LoginState extends State<Login> {
             })),
             iconTemplate("assets/icon/github_icon.jpeg", "https://github.com/mburnayev"),
             iconTemplate("assets/icon/linkedin_icon.jpeg", "https://www.linkedin.com/in/misha-burnayev/"),
-            iconTemplate("assets/icon/about_me_icon.jpeg", "https://mburnayev-website.web.app/"),
+            iconTemplate("assets/icon/about_me_icon.jpeg", "https://misha.burnayev.com/"),
           ])
         ]));
   }

@@ -63,6 +63,21 @@ auth_creds = open("creds_me.txt")
 email, password = auth_creds.readline().split(" ")
 user = auth.sign_in_with_email_and_password(email, password)
 
+months = {
+    1: "January",
+    2: "February",
+    3: "March",
+    4: "April",
+    5: "May",
+    6: "June",
+    7: "July",
+    8: "August",
+    9: "September",
+    10: "October",
+    11: "November",
+    12: "December"
+}
+
 # Recording variables
 recording = False
 writer = None
@@ -94,7 +109,7 @@ def check_keys():
             manual_mode = True
             recording = True
 
-            title = time.strftime("Video_%y.%m.%d_%H.%M.%S.mp4", time.localtime())
+            title = time.strftime("Test_%y.%m.%d_%H.%M.%S.mp4", time.localtime())
             writer = cv2.VideoWriter(title, cv2.VideoWriter_fourcc(*"avc1"), 10.0, (640, 480))
 
         # Stop recording video if user presses 's' key, clear VideoWriter
@@ -117,7 +132,8 @@ def check_keys():
 def main():
     global user, recording, writer, title, manual_mode, quit_flag
 
-    cap = cv2.VideoCapture(2)
+    cap = cv2.VideoCapture(0)
+    cap.set(cv2.CAP_PROP_FPS, 30)
 
     if not cap.isOpened():
         print("Cannot open camera!")
@@ -151,6 +167,7 @@ def main():
                 if not ret:
                     print("Can't retrieve frame, exiting ...")
                     break
+                time.sleep(0.03)
 
                 # Rotate frame 180 degrees since I mounted the camera upside down :P
                 frame = cv2.rotate(frame, cv2.ROTATE_180)
@@ -198,7 +215,9 @@ def main():
 
                                 # Only push longer recordings, filter out 'blip' videos
                                 if os.path.getsize(title) > 100000:
-                                    path_cloud = "videos/" + title
+                                    video_push_ts = time.localtime()
+                                    video_month = months[video_push_ts.tm_mon]
+                                    path_cloud = f"videos/{video_push_ts.tm_year}/{video_month}/{video_push_ts.tm_mday}/{title}"
                                     storage.child(path_cloud).put(title, user['idToken'])
                                     time.sleep(1)
                                     num_recordings += 1
@@ -220,7 +239,9 @@ def main():
 
                                 # Only push longer recordings, filter out 'blip' videos
                                 if os.path.getsize(title) > 300000:
-                                    path_cloud = "videos/" + title
+                                    video_push_ts = time.localtime()
+                                    video_month = months[video_push_ts.tm_mon]
+                                    path_cloud = f"videos/{video_push_ts.tm_year}/{video_month}/{video_push_ts.tm_mday}/{title}"
                                     storage.child(path_cloud).put(title, user['idToken'])
                                     time.sleep(1)
                                     num_recordings += 1
